@@ -7,6 +7,6 @@ import { Component } from '@angular/core';
 })
 export default class AppComponent {
   constructor() {
-    this.name = 'project'
+    this.name = 'career'
   }
 }
