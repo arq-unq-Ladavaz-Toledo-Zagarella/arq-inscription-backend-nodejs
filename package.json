@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "main": "server.js",
   "scripts": {
-    "start": "babel-node -- src/backend/server.js"
+    "start": "babel-node -- src/backend/server.js",
+    "test": "mocha test/backend --recursive --compilers js:babel-core/register --require babel-polyfill --timeout 120000"
   },
   "keywords": [],
   "author": "",
