@@ -4,7 +4,6 @@ import Career from '../models/Career.js'
 import Student from '../models/Student.js'
 import Subject from '../models/Subject.js'
 import Course from '../models/Course.js'
-import CourseDays from '../models/CourseDay.js'
 
 let router = express.Router()
 
@@ -70,8 +69,14 @@ router.post('/materias', (req, res, next) => {
 })
 
 //Cursos
+router.get('/cursos', (req, res, next) => {
+  Course.find()
+    .then(cursos => res.json(cursos))
+    .catch(next)
+})
+
 router.get('/cursos/:curso', (req, res, next) => {
-  get(req.course, res, 'courseDays', next)
+  get(req.course, res, 'days', next)
 })
 
 router.param('course', (req, res, next, value) => {
@@ -91,26 +96,6 @@ router.post('/materias/:materia/cursos', (req, res, next) => {
   const course = new Course(req.body)
   course.subject = subject
   saveParentAndChild(subject, 'courses', course, 'courses', res, next)
-})
-
-//Días de cursada
-router.post('/cursos/:curso/diascursada', (req, res, next) => {
-  const course = req.course
-  const courseDay = new courseDay(req.body)
-  courseDayco.course = course
-  saveParentAndChild(course, 'courseDays', courseDays, 'courseDays', res, next)
-})
-
-router.param('courseDay', (req, res, next, value) => {
-  CourseDay.findById(value)
-    .then(courseDay => {
-      if (! courseDay ) {
-        throw new Error(`Día de cursada no encontrado ${value}`)
-      }
-      req.courseDay = courseDay
-      next()
-    })
-    .catch(next)
 })
 
 //Genéricos

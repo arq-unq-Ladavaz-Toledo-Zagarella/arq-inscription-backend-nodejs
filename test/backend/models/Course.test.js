@@ -35,7 +35,9 @@ describe("Course model object", () => {
 		const course = new Course({
 			name: "Name of course",
 			quota: 0,
-			courseDays: [],
+			days: [ "Lunes", "Martes" ],
+			startTime: "10",
+			endTime: "12",
 			subject: parentSubject
 		})
 
@@ -45,7 +47,9 @@ describe("Course model object", () => {
 		saved.should.have.property("_id")
         saved.should.have.property("name").equal("Name of course")
         saved.should.have.property("quota").equal(0)
+        saved.should.have.property("startTime").equal("10")
+        saved.should.have.property("endTime").equal("12")
         saved.should.have.property("subject").that.has.property("_id").equal(parentSubject._id)
-        saved.should.have.property("courseDays").that.has.lengthOf(0) 
+        saved.should.have.property("days").that.has.lengthOf(2) 
 	})
 })
