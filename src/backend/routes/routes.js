@@ -4,6 +4,7 @@ import Career from '../models/Career.js'
 import Student from '../models/Student.js'
 import Subject from '../models/Subject.js'
 import Course from '../models/Course.js'
+import Inscription from '../models/Inscription.js'
 
 let router = express.Router()
 
@@ -35,6 +36,37 @@ router.post('/carreras', (req, res, next) => {
   const carrera = new Career(req.body)
   carrera.save()
   .then(carrera => res.json(carrera))
+  .catch(next)
+})
+
+//Formularios de inscripción
+//Carreras
+router.get('/inscripciones', (req, res, next) => {
+  Career.find()
+    .then(inscripciones => res.json(inscripciones))
+    .catch(next)
+})
+
+router.get('/inscripciones/:inscripcion', (req, res, next) => {
+  get(req.inscription, res, 'courses', next)
+})
+
+router.param('inscripcion', (req, res, next, value) => {
+  Inscription.findById(value)
+    .then(inscription => {
+      if (! inscription ) {
+        throw new Error(`Formulario de inscripción no encontrado ${value}`)
+      }
+      req.inscription = inscription
+      next()
+    })
+    .catch(next)
+})
+
+router.post('/inscripciones', (req, res, next) => {
+  const inscripcion = new Inscription(req.body)
+  inscripcion.save()
+  .then(inscripcion => res.json(inscripcion))
   .catch(next)
 })
 

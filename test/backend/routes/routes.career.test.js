@@ -35,7 +35,6 @@ describe("routes", () => {
 
         response.body.should.have.property("_id")
         response.body.should.have.property("name", "Career1")
-        response.body.should.have.property("milestones").with.lengthOf(1)
       })
     })
 

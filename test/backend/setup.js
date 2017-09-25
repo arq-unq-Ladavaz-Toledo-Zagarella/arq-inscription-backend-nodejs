@@ -5,6 +5,7 @@ import Career from "../../src/backend/models/Career"
 import Course from "../../src/backend/models/Course"
 import Student from "../../src/backend/models/Student"
 import Subject from "../../src/backend/models/Subject"
+import Inscription from "../../src/backend/models/Inscription"
 
 /**
  * @return {Function} a function that when invoked will prepare mockgoose
@@ -32,11 +33,17 @@ export async function createMockData() {
 		mockData.career1 = await new Career({ name: "Career1", subjects: []}).save()
 		mockData.subject1 = await new Subject({ name: "Subject1", courses: [], career: mockData.career1 }).save()
 		mockData.course1 = await new Course({ name: "Course1", quota: 0, days: "", startTime: "", endTime: "", subject: mockData.subject1 }).save()
+		
+
+		mockData.student1 = await new Student({ name: "Student1", studentId: 1, careers: [], approvedSubjects: []}).save()
+		mockData.inscription1 = await new Inscription({ courses: [], student: mockData.student1}).save()
+
 
 		mockData.subject1.courses.push(mockData.course1)
 		mockData.career1.subjects.push(mockData.subject1)
 
 		mockData.career1 = await mockData.career1.save()
+		mockData.student1 = await mockData.student1.save()
 
 		return mockData
 }
