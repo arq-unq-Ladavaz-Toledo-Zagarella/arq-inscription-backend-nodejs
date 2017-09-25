@@ -23,7 +23,7 @@ router.get('/carreras/:carrera', (req, res, next) => {
 router.param('carrera', (req, res, next, value) => {
   Career.findById(value)
     .then(career => {
-      if (! subject ) {
+      if (! career ) {
         throw new Error(`Carrera no encontrada ${value}`)
       }
       req.career = career
