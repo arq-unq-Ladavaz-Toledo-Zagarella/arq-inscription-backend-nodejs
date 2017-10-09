@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
-
-import SubjectService from '../services/subject.service';
+import { Router } from "@angular/router";
+import InscriptionService from '../services/inscription.service';
+import CourseService from '../services/course.service';
 
 @Component({
   selector: 'app-view',
@@ -24,8 +25,19 @@ import SubjectService from '../services/subject.service';
 			    <router-outlet></router-outlet>
 			</div>`,
   styleUrls: ['./assets/styles.css'],
-  providers: [ SubjectService ]
+  providers: [ InscriptionService, CourseService ]
 })
 export default class AppComponent {
-  constructor() { }
+  constructor(router) { 
+  	this.router= router
+  }
+
+  logout() {
+  	sessionStorage.removeItem("id")
+    this.router.navigate(['/'])
+  }
 }
+
+AppComponent.parameters = [
+  Router
+]

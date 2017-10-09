@@ -44,14 +44,8 @@ export default class LoginComponent {
   }
 
   login() {
-  	return this.http.get('/students/login/' + 
-      this.username + '/' + this.password).map(res => res.json())
-        .subscribe(
-          result => {
-            sessionStorage.setItem("id", result)
-            this.router.navigate(['create-inscription'])
-          },
-          error => { });
+  	sessionStorage.setItem("id", 1)
+    this.router.navigate(['create-inscription'])
   }
 }
 

@@ -11,14 +11,12 @@ import 'rxjs/add/operator/toPromise'
 
 import AppComponent from './app/components/app.component'
 import ExampleComponent from './app/components/example.component'
-import LoginComponent from './app/components/login/login.component'
+import LoginComponent from './app/components/login.component'
 import CreateInscriptionComponent from './app/components/create-inscription.component'
 
 import { RouterModule }  from '@angular/router';
 
 let router = RouterModule.forRoot([
-  { path: '', redirectTo: '/example', pathMatch: 'full' },
-  { path: 'example', component: ExampleComponent },
   { path: 'login', component: LoginComponent },
   { path: 'create-inscription', component: CreateInscriptionComponent },
   { path: '**', redirectTo: 'login', pathMatch: 'full'}

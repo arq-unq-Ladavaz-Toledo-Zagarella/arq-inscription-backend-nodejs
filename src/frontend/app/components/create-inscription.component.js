@@ -1,29 +1,30 @@
 import { Component } from '@angular/core';
 import { Http, Response, Headers } from '@angular/http';
 import { Router } from "@angular/router";
-import SubjectService from '../services/subject.service';
+import CourseService from '../services/course.service';
+import InscriptionService from '../services/inscription.service';
 
 @Component({
   selector: 'create-inscription',
-  inputs: ['subjects'],
+  inputs: ['courses'],
   template: `<section id="">
   <div class="container">
     <div class="row">
       <div class="col">
         <h2>Buscar materias</h2>
         <input type="text" class="form-control" placeholder="Matemática, Bases de Datos, Organización de Computadoras..." aria-describedby="basic-addon2" [(ngModel)]="filter" (ngModelChange)="search()">
-		    <div class="filterList" *ngIf="isThereAnySubjectFound()">
-				<div class="list-group" *ngFor="let subject of subjectsFound; let i = index" [attr.data-index]="i">
-				  <button type="button" class="btn-block list-group-item list-group-item-action subjects-found" (click)="selectSubject(i)">
-				  <strong>{{subject.name}}</strong></button>
+		    <div class="filterList" *ngIf="isThereAnyCourseFound()">
+				<div class="list-group" *ngFor="let course of coursesFound; let i = index" [attr.data-index]="i">
+				  <button type="button" class="btn-block list-group-item list-group-item-action subjects-found" (click)="selectCourse(i)">
+				  <strong>{{course.subject.name}}</strong></button>
 				</div>
 			</div>
       </div>
       <div class="col">
         <h2>Materias seleccionadas</h2>                
-        <ul class="list-group" *ngFor="let subject of selectedSubjects; let i = index" [attr.data-index]="i">
-		  <li class="list-group-item">{{subject.name}}
-		  	<button type="button" class="close" aria-label="Close" (click)="unselectSubject(i)">
+        <ul class="list-group" *ngFor="let course of selectedCourses; let i = index" [attr.data-index]="i">
+		  <li class="list-group-item">{{course.subject.name}}
+		  	<button type="button" class="close" aria-label="Close" (click)="unselectCourse(i)">
 				<span aria-hidden="true">&times;</span>
 			</button>
 		  </li>
@@ -40,51 +41,47 @@ import SubjectService from '../services/subject.service';
 })
 export default class CreateInscriptionComponent {
   filter= ""
-  subjects= []
-  subjectsFound= []
-  selectedSubjects= []
+  courses= []
+  coursesFound= []
+  selectedCourses= []
 
-  constructor(http, router, subjectService) { 
+  constructor(http, router, courseService, inscriptionService) { 
     this.http = http;
     this.router = router;
-    this.subjectService = subjectService
-    this.subjects= this.subjectService.subjects
+    this.courseService = courseService
+    this.inscriptionService = inscriptionService
+    //this.courses= this.courseService.courses
   }
- /*
-  send() {
-    this.http.post('/inscriptions/create/1', this.selectedSubjects).map(res => res.json())
-    .subscribe(
-      result => {
-        this.router.navigate(['/my-inscription', result.id])
-      },
-      error => { });
+ 
+  send() {  
+    //this.inscriptionService.create()
   }
-*/
+
   search() {
     if(!this.filterEntered()){
-      this.setSubjectsFound([])
+      this.setCoursesFound([])
     }else {
-      this.setSubjectsFound(this.applyFilter())
-      this.setSubjectsFound(this.deletePreviouslySelectedSubjects())
+      this.setCoursesFound(this.applyFilter())
+      this.setCoursesFound(this.deletePreviouslySelectedCourses())
     }
   }
 
   applyFilter() {
-    return this.subjects.filter( subject => subject.name.toLowerCase( ).indexOf(this.filter.toLowerCase( )) >= 0)
+    return this.courses.filter( course => course.subject.name.toLowerCase( ).indexOf(this.filter.toLowerCase( )) >= 0)
   }
 
-  deletePreviouslySelectedSubjects() {
-    return this.subjectsFound.filter(item => this.selectedSubjects.indexOf(item) < 0)
+  deletePreviouslySelectedCourses() {
+    return this.coursesFound.filter(item => this.selectedCourses.indexOf(item) < 0)
   }
 
-  selectSubject(i) {
-    this.selectedSubjects.push(this.subjectsFound[i])
-    this.setSubjectsFound([])
+  selectCourse(i) {
+    this.selectedCourses.push(this.coursesFound[i])
+    this.setCoursesFound([])
     this.deleteFilter()
   }
 
-  unselectSubject(i) {
-    this.selectedSubjects.splice(i, 1)
+  unselectCourse(i) {
+    this.selectedCourses.splice(i, 1)
   }
 
   filterEntered() {
@@ -95,30 +92,34 @@ export default class CreateInscriptionComponent {
     this.filter= ""
   }
 
-  setSubjectsFound(anArray) {
-    this.subjectsFound= anArray
+  setCoursesFound(anArray) {
+    this.coursesFound= anArray
   }
 
-  getSubjectsFound() {
-    return this.subjectsFound
+  getCoursesFound() {
+    return this.coursesFound
   }
 
-  isThereAnySubjectFound() {
-    return this.subjectsFound != []
+  isThereAnyCourseFound() {
+    return this.coursesFound != []
   }
 
-/*
+
   ngOnInit() {
     if(sessionStorage.getItem("id") === null)
-      this.router.navigate(['/'])
+      this.router.navigate(['/login'])
+    this.courses.push({subject: {name: "Mate 1"}})
+    this.courses.push({subject: {name: "Mate 2"}})
+    this.courses.push({subject: {name: "Orga"}})
+    this.courses.push({subject: {name: "Objetos 3"}})
   }
-*/
-  findSubjects() {
-    this.subjects= this.subjectService.subjects
-    console.log(this.subjects)
+
+  findCourses() {
+    this.courses= this.courseService.Courses
+    console.log(this.courses)
   }
 }
 
 CreateInscriptionComponent.parameters = [
-  Http, Router, SubjectService
+  Http, Router, CourseService, InscriptionService
 ]
