@@ -39,10 +39,39 @@ router.post('/carreras', (req, res, next) => {
   .catch(next)
 })
 
+//Estudiantes
+router.get('/estudiantes', (req, res, next) => {
+  Student.find()
+    .then(estudiantes => res.json(estudiantes))
+    .catch(next)
+})
+
+router.get('/estudiantes/:estudiante', (req, res, next) => {
+  res.json(req.student)
+})
+
+router.param('estudiante', (req, res, next, value) => {
+  Student.findById(value)
+    .then(student => {
+      if (! student ) {
+        throw new Error(`Estudiante no encontrado ${value}`)
+      }
+      req.student = student
+      next()
+    })
+    .catch(next)
+})
+
+router.post('/estudiantes', (req, res, next) => {
+  const estudiante = new Student(req.body)
+  estudiante.save()
+  .then(estudiante => res.json(estudiante))
+  .catch(next)
+})
+
 //Formularios de inscripción
-//Carreras
 router.get('/inscripciones', (req, res, next) => {
-  Career.find()
+  Inscription.find()
     .then(inscripciones => res.json(inscripciones))
     .catch(next)
 })
@@ -93,11 +122,11 @@ router.param('materia', (req, res, next, value) => {
     .catch(next)
 })
 
-router.post('/materias', (req, res, next) => {
-  const materia = new Subject(req.body)
-  materia.save()
-  .then(materia => res.json(materia))
-  .catch(next)
+router.post('/carreras/:carrera/materias', (req, res, next) => {
+  const career = req.career
+  const subject = new Subject(req.body)
+  subject.career = career
+  saveParentAndChild(career, 'subjects', subject, 'subjects', res, next)
 })
 
 //Cursos
@@ -108,10 +137,10 @@ router.get('/cursos', (req, res, next) => {
 })
 
 router.get('/cursos/:curso', (req, res, next) => {
-  get(req.course, res, 'days', next)
+  res.json(req.course)
 })
 
-router.param('course', (req, res, next, value) => {
+router.param('curso', (req, res, next, value) => {
   Course.findById(value)
     .then(course => {
       if (! course ) {

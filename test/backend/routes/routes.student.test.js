@@ -1,5 +1,5 @@
 import { setupMocha, createMockData } from "../setup"
-import Career from "../../../src/backend/models/Career"
+import Student from "../../../src/backend/models/Student"
 
 import chai from "chai"
 const should = chai.should()
@@ -17,28 +17,29 @@ describe("routes", () => {
     mockData = await createMockData()
   })
 
-  describe("GET /carreras", () => {
-    it("Should return the existing project", async() => {
+  describe("GET /estudiantes", () => {
+    it("Should return the existing student", async() => {
       const response = await request(app)
-            .get("/carreras")
+            .get("/estudiantes")
             .expect(200)
       response.body.should.have.lengthOf(1)
     })
   })
 
-  describe("GET /carreras/:carrera", () => {
-    context("When querying an existing career id", () => {
+  describe("GET /estudiantes/:estudiante", () => {
+    context("When querying an existing student id", () => {
       it("Should return the existing object", async() => {
         const response = await request(app)
-              .get("/carreras/" + mockData.career1._id)
+              .get("/estudiantes/" + mockData.student1._id)
               .expect(200)
 
         response.body.should.have.property("_id")
-        response.body.should.have.property("name", "Career1")
+        response.body.should.have.property("name").equal("Student1")
+        response.body.should.have.property("studentId").equal(1)
       })
     })
 
-    context("When querying an non-existing project id", () => {
+    context("When querying an non-existing student id", () => {
       it("Should return an error", () => {
         return request(app)
               .get("/carreras/590761c5c00daf0caa9b881f" )
@@ -47,38 +48,38 @@ describe("routes", () => {
     })
   })
 
-  describe("Post /carreras", () => {
+  describe("Post /estudiantes", () => {
 
-    it("Should return the object of the newly created career", async() => {
+    it("Should return the object of the newly created student", async() => {
       const response = await request(app)
-            .post("/carreras")
-            .send({ name: "Career3", subjects: [] })
+            .post("/estudiantes")
+            .send({ name: "Student6", studentId: 6 })
             .expect(200)
       response.body.should.be.a('object')
     })
 
-    it("Should save the career in the database", async() => {
+    it("Should save the student in the database", async() => {
       const response = await request(app)
-            .post("/carreras")
-            .send({ name: "Career3", subjects: [] })
+            .post("/estudiantes")
+            .send({ name: "Student7", studentId: 7 })
             .expect(200)
-
-      const found = await Career.findById(response.body)
+      
+      const found = await Student.findById(response.body)
       should.exist(found)
 
       found.should.have.property("_id")
-      found.should.have.property("name", "Career3")
-      found.should.have.property("subjects").with.lengthOf(0)
+      found.should.have.property("name").equal("Student7")
+      found.should.have.property("studentId").equal(7)
     })
 
-    it("Newer project should be returned on /GET carreras", async() => {
+    it("Newer student should be returned on /GET estudiantes", async() => {
       const response = await request(app)
-            .post("/carreras")
-            .send({ name: "Career3", subjects: [] })
+            .post("/estudiantes")
+            .send({ name: "Student8", studentId: 8 })
             .expect(200)
 
       const response2 = await request(app)
-            .get("/carreras")
+            .get("/estudiantes")
             .expect(200)
 
       response2.body.should.have.lengthOf(2)
