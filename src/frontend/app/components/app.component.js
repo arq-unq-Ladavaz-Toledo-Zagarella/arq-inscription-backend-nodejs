@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
 
+import SubjectService from '../services/subject.service';
+
 @Component({
   selector: 'app-view',
   template: `<!-- Navigation -->
@@ -21,7 +23,8 @@ import { Component } from '@angular/core';
 			<div class="container-fluid">
 			    <router-outlet></router-outlet>
 			</div>`,
-  styleUrls: ['./assets/styles.css']
+  styleUrls: ['./assets/styles.css'],
+  providers: [ SubjectService ]
 })
 export default class AppComponent {
   constructor() { }

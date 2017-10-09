@@ -11,3 +11,47 @@ header {
 section {
   padding: 150px 0;
 }
+
+.list-group-item.subjects-found:focus, .list-group-item.subjects-found:hover {
+    background-color: #0275d8;
+    color: white;
+    border-radius: 0;
+    cursor: pointer;
+}
+
+.list-group-item.subjects-found:focus, .list-group-item.subjects-found {
+    border: none;
+}
+
+.filterList[_ngcontent-c1] {
+    box-shadow: 0 0 9px grey;
+    /* padding: 0 15px 0 15px; */
+    border-radius: 8px;
+    position: absolute;
+    z-index: 100;
+}
+
+.col-centered{
+    float: none;
+    margin: 0 auto;
+}
+
+.text-center.selected-subject-badge {
+    padding: 1px;
+}
+
+button.close:hover {
+	cursor: pointer;
+}
+
+input {
+    background-color: #fafafa;
+}
+
+.row {
+    margin-left: unset;
+}
+
+.list-group-item {
+    background-color: #fafafa;
+}
