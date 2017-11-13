@@ -13,12 +13,14 @@ import AppComponent from './app/components/app.component'
 import ExampleComponent from './app/components/example.component'
 import LoginComponent from './app/components/login.component'
 import CreateInscriptionComponent from './app/components/create-inscription.component'
+import QuestionComponent from './app/components/question.component'
 
 import { RouterModule }  from '@angular/router';
 
 let router = RouterModule.forRoot([
   { path: 'login', component: LoginComponent },
   { path: 'create-inscription', component: CreateInscriptionComponent },
+  { path: 'question', component: QuestionComponent },
   { path: '**', redirectTo: 'login', pathMatch: 'full'}
 ], { useHash: true })
 
@@ -28,7 +30,8 @@ let router = RouterModule.forRoot([
     AppComponent,
     ExampleComponent,
     LoginComponent,
-    CreateInscriptionComponent
+    CreateInscriptionComponent,
+    QuestionComponent
   ],
   bootstrap: [ AppComponent ]
 })

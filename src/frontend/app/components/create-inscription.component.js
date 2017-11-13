@@ -55,6 +55,7 @@ export default class CreateInscriptionComponent {
  
   send() {  
     //this.inscriptionService.create()
+    this.router.navigate(['question'])
   }
 
   search() {
