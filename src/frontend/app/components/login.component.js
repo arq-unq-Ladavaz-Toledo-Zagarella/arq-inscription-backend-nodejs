@@ -45,7 +45,7 @@ export default class LoginComponent {
 
   login() {
   	sessionStorage.setItem("id", 1)
-    this.router.navigate(['create-inscription'])
+    this.router.navigate(['question'])
   }
 }
 
