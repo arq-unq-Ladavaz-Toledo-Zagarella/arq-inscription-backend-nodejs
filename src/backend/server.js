@@ -8,4 +8,4 @@ mongoose.connect(process.env.MONGO_URL || 'mongodb://localhost/careers')
 //const port = process.env.PORT
 const port = 3001
 
-app.listen(port, () => console.log(`Server running on port ${port}`))
+app.listen(process.env.PORT || port)
