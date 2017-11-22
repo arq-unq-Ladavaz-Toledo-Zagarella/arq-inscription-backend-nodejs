@@ -18,12 +18,12 @@ import InscriptionService from '../services/inscription.service';
                 <h2>{{course.subject.name}}</h2>
                 <h5>{{getSubjectSchedule(i)}}</h5>
                 <label class="custom-control custom-radio">
-                  <input name= {{course.subject.name}} type="radio" class="custom-control-input">
+                  <input name= {{course.subject.name}} type="radio" class="custom-control-input" (click)="alreadyApproved(i)">
                   <span class="custom-control-indicator"></span>
                   <span class="custom-control-description">Ya la aprobé</span>
                 </label>     
                 <label class="custom-control custom-radio" *ngFor="let thiscourse of course.subject.courses">
-                  <input name= {{course.subject.name}} type="radio" class="custom-control-input">
+                  <input name= {{course.subject.name}} type="radio" class="custom-control-input" (click)="selectCourse(thiscourse)">
                   <span class="custom-control-indicator"></span>
                   <span class="custom-control-description">Voy a cursar en C{{thiscourse.name}}</span>
                 </label>  
@@ -43,6 +43,8 @@ export default class QuestionComponent {
   courses= []
   coursesFound= []
   selectedCourses= []
+  approvedCourses= []
+
 
   constructor(http, router, courseService, inscriptionService) { 
     this.http = http;
@@ -52,22 +54,38 @@ export default class QuestionComponent {
     //this.courses= this.courseService.courses
   }
  
-  send() {  
-    this.inscriptionService.create()
+  send() { 
+    var random = Math.floor(Math.random() * 1000) + 1
+    var inscription = {}
+    inscription.courses = this.selectedCourses
+    inscription.studentId = random
+    //{ courses: this.selectedCourses , studentId: random} 
+    console.log(inscription)
+    this.inscriptionService.create(inscription)
   }
 
   deletePreviouslySelectedCourses() {
     return this.coursesFound.filter(item => this.selectedCourses.indexOf(item) < 0)
   }
 
-  selectCourse(i) {
-    this.selectedCourses.push(this.coursesFound[i])
-    this.setCoursesFound([])
-    this.deleteFilter()
+  selectCourse(thiscourse) {
+    this.selectedCourses = this.selectedCourses.filter(item => item.subject.name != thiscourse.subject.name)
+    this.selectedCourses.push(thiscourse)
+    this.approvedCourses = this.approvedCourses.filter(item => item != thiscourse.subject.name)
+    console.log(this.selectedCourses)
+    console.log(this.approvedCourses)
   }
 
   unselectCourse(i) {
     this.selectedCourses.splice(i, 1)
+  }
+
+  alreadyApproved(i) {
+    var courseName = this.courses[i].subject.name
+    this.approvedCourses.push(courseName)
+    this.selectedCourses = this.selectedCourses.filter(item => item.subject.name != courseName)
+    console.log(this.approvedCourses)
+    console.log(this.selectedCourses)
   }
 
   setCoursesFound(anArray) {
@@ -112,25 +130,27 @@ export default class QuestionComponent {
       this.router.navigate(['/login'])
     this.courses.push({subject: {name: "Mate 1", courses: [
       {"name":"1","quota":20, days: [ "Lunes", "Martes"], 
-      startTime: "18", endTime: "22",subject:[]}, 
+      startTime: "18", endTime: "22",subject:{name: "Mate 1", courses: [], career: []}}, 
       {"name":"2","quota":20, days: [ "Miércoles", "Jueves"],
-      startTime: "08", endTime: "12",subject:[]} ],
+      startTime: "08", endTime: "12",subject:{name: "Mate 1", courses: [], career: []}} ],
       career: []}})
     
     this.courses.push({subject: {name: "Mate 2", courses: [
       {"name":"1","quota":30,  days: [ "Lunes"],
-      startTime: "15", endTime: "19",subject:[]}],
+      startTime: "15", endTime: "19",subject:{name: "Mate 2", courses: [], career: []}}],
       career: []}})
     
     this.courses.push({subject: {name: "Orga", courses: [
       {"name":"1","quota":25,  days: [ "Lunes", "Viernes"],
-      startTime: "12", endTime: "15",subject:[]}],
+      startTime: "12", endTime: "15",subject:{name: "Orga", courses: [], career: []}}],
       career: []}})
     
     this.courses.push({subject: {name: "Objetos 3", courses: [
       {"name":"1","quota":15,  days: [ "Jueves"],
-      startTime: "16", endTime: "22",subject:[]}],
+      startTime: "16", endTime: "22",subject:{name: "Objetos 3", courses: [], career: []}}],
       career: []}})
+    this.selectedCourses= []
+    this.approvedCourses= []
   }
 
   findCourses() {

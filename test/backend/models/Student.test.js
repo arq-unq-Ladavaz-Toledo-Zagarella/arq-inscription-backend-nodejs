@@ -16,6 +16,7 @@ describe("Student model object", () => {
 		const student = new Student({
 			name: "Name of student",
 			studentId: 1,
+			approvedSubjects: ["Objetos 1"]
 		})
 
 		const saved = await student.save()
@@ -24,6 +25,7 @@ describe("Student model object", () => {
 		saved.should.have.property("_id")
 		saved.should.have.property("name").equal("Name of student")
 		saved.should.have.property("studentId").equal(1)
+		saved.should.have.property("approvedSubjects").that.has.lengthOf(1) 
 	})
 
 })

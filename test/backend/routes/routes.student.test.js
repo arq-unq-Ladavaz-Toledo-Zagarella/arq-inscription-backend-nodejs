@@ -36,6 +36,7 @@ describe("routes", () => {
         response.body.should.have.property("_id")
         response.body.should.have.property("name").equal("Student1")
         response.body.should.have.property("studentId").equal(1)
+        response.body.should.have.property("approvedSubjects").that.has.lengthOf(1) 
       })
     })
 
@@ -61,7 +62,7 @@ describe("routes", () => {
     it("Should save the student in the database", async() => {
       const response = await request(app)
             .post("/estudiantes")
-            .send({ name: "Student7", studentId: 7 })
+            .send({ name: "Student7", studentId: 7, approvedSubjects: ["Mate 1"] })
             .expect(200)
       
       const found = await Student.findById(response.body)
@@ -70,12 +71,13 @@ describe("routes", () => {
       found.should.have.property("_id")
       found.should.have.property("name").equal("Student7")
       found.should.have.property("studentId").equal(7)
+      found.should.have.property("approvedSubjects").that.has.lengthOf(1) 
     })
 
     it("Newer student should be returned on /GET estudiantes", async() => {
       const response = await request(app)
             .post("/estudiantes")
-            .send({ name: "Student8", studentId: 8 })
+            .send({ name: "Student8", studentId: 8, approvedSubjects: ["Mate 1"] })
             .expect(200)
 
       const response2 = await request(app)
