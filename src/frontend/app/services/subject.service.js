@@ -8,7 +8,7 @@ export default class SubjectService {
     this.http = http
     this._subjects = []
     this.http.get("/materias").toPromise()
-            .then(response => this._subjects= response)
+            .then(response => this._subjects.push(...response.json()))
             .catch(err => console.log(err))
   }
 
@@ -17,8 +17,8 @@ export default class SubjectService {
   }
 
 
-  create(subject) {
-    this.http.post("/subjects", JSON.stringify(subject), { headers:{'Content-Type': 'application/json'}})
+  create(id, subject) {
+    this.http.post(`/carreras/${id}/materias`, JSON.stringify(subject), { headers:{'Content-Type': 'application/json'}})
             .toPromise()
             .then(response => this._subjects= response.json())
             .catch(err => console.log(err))
