@@ -35,7 +35,7 @@ import SubjectService from '../services/subject.service';
       </div>
       <div class="col-lg-2 col-centered">
         <button type="button" class="btn btn-primary btn-lg btn-block" (click)="send()">Finalizar</button>  
-      </div><
+      </div>
     </div>
   </section>`,
   styleUrls: ['./assets/styles.css']
@@ -107,7 +107,7 @@ export default class QuestionComponent {
       schedules += this.getCourseSchedule(index, i) 
     }
     return schedules
-  }
+  } 
 
   ngOnInit() {
     if(sessionStorage.getItem("id") === null)

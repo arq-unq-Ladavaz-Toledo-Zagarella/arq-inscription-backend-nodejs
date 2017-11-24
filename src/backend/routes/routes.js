@@ -106,6 +106,14 @@ router.get('/materias', (req, res, next) => {
     .catch(next)
 })
 
+router.get('/materiasycursos', (req, res, next) => {
+  Subject.find({}, function(err, subjects) {
+    Course.populate(subjects, {path: "courses"}, function(err, subjects) {
+      res.status(200).send(subjects)
+    })
+  })
+})
+
 router.get('/materias/:materia', (req, res, next) => {
   get(req.subject, res, 'courses', next)
 })
