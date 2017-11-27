@@ -24,9 +24,9 @@ import SubjectService from '../services/subject.service';
                   <span class="custom-control-description">Ya la aprobé</span>
                 </label>     
                 <label class="custom-control custom-radio" *ngFor="let thiscourse of subject.courses">
-                  <input name= {{subject.name}} type="radio" class="custom-control-input" (click)="selectCourse(thiscourse)">
+                  <input name= {{subject.name}} type="radio" class="custom-control-input" (click)="selectCourse(thiscourse, i)">
                   <span class="custom-control-indicator"></span>
-                  <span class="custom-control-description">Voy a cursar en C{{thiscourse.name}}</span>
+                  <span class="custom-control-description">Voy a cursar en {{thiscourse.name}}</span>
                 </label>  
               </li>
             </fieldset>
@@ -58,18 +58,23 @@ export default class QuestionComponent {
   send() { 
     var random = Math.floor(Math.random() * 1000) + 1
     var inscription = {}
-    inscription.courses = this.selectedCourses
+    var myCourses = []
+ 
+    this.selectedCourses.forEach(function(element) {
+      myCourses.push(element._id)
+    })
+
     inscription.studentId = random
-    console.log(inscription)
+    inscription.courses = myCourses
+
     this.inscriptionService.create(inscription)
   }
 
-  selectCourse(thiscourse) {
-    this.selectedCourses = this.selectedCourses.filter(item => item.subject.name != thiscourse.subject.name)
+  selectCourse(thiscourse, i) {
+    var subjectName = this.subjects[i].name
+    this.selectedCourses = this.selectedCourses.filter(item => item.subject.name != subjectName)
     this.selectedCourses.push(thiscourse)
-    this.approvedCourses = this.approvedCourses.filter(item => item != thiscourse.subject.name)
-    console.log(this.selectedCourses)
-    console.log(this.approvedCourses)
+    this.approvedCourses = this.approvedCourses.filter(item => item != subjectName)
   }
 
   unselectCourse(i) {
@@ -77,11 +82,9 @@ export default class QuestionComponent {
   }
 
   alreadyApproved(i) {
-    var courseName = this.courses[i].subject.name
-    this.approvedCourses.push(courseName)
-    this.selectedCourses = this.selectedCourses.filter(item => item.subject.name != courseName)
-    console.log(this.approvedCourses)
-    console.log(this.selectedCourses)
+    var subjectName = this.subjects[i].name
+    this.approvedCourses.push(subjectName)
+    this.selectedCourses = this.selectedCourses.filter(item => item.subject.name != subjectName)
   }
 
   getCourseSchedule(indSub, indCour) {
