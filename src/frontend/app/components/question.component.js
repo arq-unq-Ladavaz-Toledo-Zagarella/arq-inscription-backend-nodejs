@@ -13,7 +13,7 @@ import SubjectService from '../services/subject.service';
       <div class="row">
         <div class="col">
           <h1>Seleccione las materias que desea cursar</h1> 
-          <ul class="list-group" *ngFor="let subject of subjects; let i = index" [attr.data-index]="i">
+          <ul class="list-group" *ngFor="let subject of subjects  | paginate: { itemsPerPage: 3, currentPage: p } ; let i = index" [attr.data-index]="i">
             <fieldset class="form-group row">
               <li class="list-group-item"> 
                 <h2>{{subject.name}}</h2>
@@ -30,7 +30,8 @@ import SubjectService from '../services/subject.service';
                 </label>  
               </li>
             </fieldset>
-          </ul>                
+          </ul>    
+          <pagination-controls (pageChange)="p = $event" previousLabel="Anterior" nextLabel="Siguiente"></pagination-controls>            
         </div>
       </div>
       <div class="col-lg-2 col-centered">
