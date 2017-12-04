@@ -12,8 +12,8 @@ export default class SubjectService {
             .catch(err => console.log(err))
   }
 
-  get subjects() {
-    return this._subjects
+  subjects() {
+    return this.http.get("/materiasycursos")
   }
 
   create(id, subject) {

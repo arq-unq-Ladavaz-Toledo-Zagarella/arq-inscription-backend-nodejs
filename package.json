@@ -65,14 +65,15 @@
     "copy-webpack-plugin": "^4.0.1",
     "express": "^4.14.0",
     "html-webpack-plugin": "^2.28.0",
+    "jwt-simple": "^0.5.0",
+    "method-override": "^2.1.2",
     "mongoose": "^4.8.1",
+    "ngx-dropdown": "0.0.22",
     "ngx-pagination": "^3.0.3",
     "reflect-metadata": "^0.1.10",
     "rxjs": "5.0.1",
     "webpack": "^2.2.1",
-    "zone.js": "^0.7.4",
-    "jwt-simple": "^0.5.0",
-    "method-override": "^2.1.2"
+    "zone.js": "^0.7.4"
   },
   "engines": {
     "node": "8.9.1"

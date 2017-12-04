@@ -9,7 +9,12 @@ import AuthService from '../services/auth.service';
 @Component({
   selector: 'question',
   inputs: ['courses'],
-  template: `<section id="">
+  template: `
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css">
+      <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
+      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js">
+  <section id="">
   <div class="container">
       <div class="row">
         <div class="col">
@@ -18,17 +23,17 @@ import AuthService from '../services/auth.service';
             <fieldset class="form-group row">
               <li class="list-group-item"> 
                 <h2>{{subject.name}}</h2>
-                <h5>{{getSubjectSchedule(i)}}</h5>
-                <label class="custom-control custom-radio">
-                  <input name= {{subject.name}} type="radio" class="custom-control-input" (click)="alreadyApproved(i)">
-                  <span class="custom-control-indicator"></span>
-                  <span class="custom-control-description">Ya la aprobé</span>
-                </label>     
-                <label class="custom-control custom-radio" *ngFor="let thiscourse of subject.courses">
-                  <input name= {{subject.name}} type="radio" class="custom-control-input" (click)="selectCourse(thiscourse, i)">
-                  <span class="custom-control-indicator"></span>
-                  <span class="custom-control-description">Voy a cursar en {{thiscourse.name}}</span>
-                </label>  
+                <h5>{{getSubjectSchedule(subject)}}</h5>
+                <div class="btn-group">
+                  <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    {{getValueForThisDropdown(subject._id)}}
+                  </button>
+                  <div class="dropdown-menu">
+                    <button class="dropdown-item" (click)="unselect(subject)">Todavía no la voy a cursar</button>
+                    <button class="dropdown-item" (click)="approved(subject)">Ya la aprobé</button>
+                    <button class="dropdown-item" *ngFor="let thiscourse of subject.courses" (click)="selectCourse(thiscourse)">Cursaría en comisión {{thiscourse.name}}</button>
+                  </div>
+                </div>
               </li>
             </fieldset>
           </ul>    
@@ -47,7 +52,8 @@ export default class QuestionComponent {
   courses= []
   selectedCourses= []
   approvedCourses= []
-
+  approvedSubjects= []
+  valuesDropdowns= []
 
   constructor(http, router, courseService, inscriptionService, subjectService, activatedRoute, authService) { 
     this.http = http;
@@ -58,37 +64,50 @@ export default class QuestionComponent {
     this.activatedRoute= activatedRoute
     this.authService= authService
   }
- 
+  
+  unselect(subject) {
+    this.removeAnySelectedCourseOfThisSubject(subject)
+    this.removeFromApprovedSubjects(subject)
+    this.changeValueForThisDropdown(subject._id, "Todavía no la voy a cursar")
+  }
+
+  removeAnySelectedCourseOfThisSubject(subject) {
+    for (var i = 0; i < this.selectedCourses.length; i++) {
+      if(this.selectedCourses[i].subject === subject._id)
+        this.selectedCourses.splice(i, 1)
+    }
+  }
+
+  removeFromApprovedSubjects(subject) {
+    for (var i = 0; i < this.approvedSubjects.length; i++) {
+      if(this.approvedSubjects[i]._id === subject._id)
+        this.approvedSubjects.splice(i, 1)
+    }
+  }
+
+  approved(subject) {
+    this.unselect(subject)
+    this.approvedSubjects.push(subject)
+    this.changeValueForThisDropdown(subject._id, "Ya la aprobé")
+  }
+
+  selectCourse(course) {
+    for (var i = 0; i < this.selectedCourses.length; i++) {
+      if(this.selectedCourses[i].subject === course.subject)
+        this.selectedCourses.splice(i, 1)
+    }
+    this.selectedCourses.push(course)
+    this.changeValueForThisDropdown(course.subject, "Cursaría en comisión " + course.name)
+  }
+
   send() { 
     var inscription = {}
-    var myCourses = []
-    this.selectedCourses.forEach(function(element) {
-      myCourses.push(element._id)
-    })
-    inscription.courses = myCourses
+    inscription.courses = this.selectedCourses
     this.inscriptionService.create(inscription, this.token)
   }
 
-  selectCourse(thiscourse, i) {
-    var subjectName = this.subjects[i].name
-    this.selectedCourses = this.selectedCourses.filter(item => item.subject.name != subjectName)
-    this.selectedCourses.push(thiscourse)
-    this.approvedCourses = this.approvedCourses.filter(item => item != subjectName)
-  }
-
-  unselectCourse(i) {
-    this.selectedCourses.splice(i, 1)
-  }
-
-  alreadyApproved(i) {
-    var subjectName = this.subjects[i].name
-    this.approvedCourses.push(subjectName)
-    this.selectedCourses = this.selectedCourses.filter(item => item.subject.name != subjectName)
-  }
-
-  getCourseSchedule(indSub, indCour) {
-    var course = this.subjects[indSub].courses[indCour]
-    var schedule = "Comisión " + course.name + ". Horarios: "
+  getCourseSchedule(course) {
+    var schedule = "Comisión " + course.name + ", Horarios: "
     var i = 0
     for (; i < course.days.length; i++) { 
       if (i == course.days.length - 1) {
@@ -101,18 +120,16 @@ export default class QuestionComponent {
     return schedule
   }
 
-  getSubjectSchedule(index) {
-    var subject = this.subjects[index]
+  getSubjectSchedule(subject) {
     var schedules = ""
     var i = 0
     for (; i < subject.courses.length; i++) {
-      schedules += this.getCourseSchedule(index, i) 
+      schedules += this.getCourseSchedule(subject.courses[i]) 
     }
     return schedules
   } 
 
   ngOnInit() {
-  
     this.activatedRoute.params.subscribe(params => {
         this.token = params['token'];
     });
@@ -120,12 +137,33 @@ export default class QuestionComponent {
         this.router.navigate(['/login'])
       })
     this.courses = this.courseService.courses
-    this.subjects = this.subjectService.subjects
-
+    this.subjectService.subjects().subscribe(result => { 
+      this.subjects= result.json()
+      this.initValueDropdowns()
+    },error => { })
     this.selectedCourses= []
     this.approvedCourses= []
   }
 
+  initValueDropdowns() {
+    for (var i = 0; i < this.subjects.length; i++) {
+      this.valuesDropdowns.push({idSubject: this.subjects[i]._id, value: "Todavía no la voy a cursar"})
+    }
+  }
+
+  getValueForThisDropdown(idSubject) {
+    for (var i = 0; i < this.valuesDropdowns.length; i++) {
+      if(this.valuesDropdowns[i].idSubject === idSubject)
+        return this.valuesDropdowns[i].value
+    }
+  }
+
+  changeValueForThisDropdown(idSubject, newValue) {
+    for (var i = 0; i < this.valuesDropdowns.length; i++) {
+      if(this.valuesDropdowns[i].idSubject === idSubject)
+        this.valuesDropdowns[i].value= newValue
+    }
+  }
 }
 
 QuestionComponent.parameters = [

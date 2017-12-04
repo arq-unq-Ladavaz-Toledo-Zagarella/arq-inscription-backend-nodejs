@@ -8,7 +8,7 @@ import { FormsModule } from '@angular/forms'
 import {NgxPaginationModule} from 'ngx-pagination'
 import { HttpModule } from '@angular/http'
 import 'rxjs/add/operator/toPromise'
-
+import { DropdownModule } from "ngx-dropdown";
 import AppComponent from './app/components/app.component'
 import ExampleComponent from './app/components/example.component'
 import LoginComponent from './app/components/login.component'
@@ -25,7 +25,7 @@ let router = RouterModule.forRoot([
 ], { useHash: true })
 
 @NgModule({
-  imports: [ router, BrowserModule, FormsModule, HttpModule, NgxPaginationModule ],
+  imports: [ router, BrowserModule, FormsModule, HttpModule, NgxPaginationModule, DropdownModule ],
   declarations: [
     AppComponent,
     ExampleComponent,
