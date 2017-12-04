@@ -20,7 +20,7 @@ import { RouterModule }  from '@angular/router';
 let router = RouterModule.forRoot([
   { path: 'login', component: LoginComponent },
   { path: 'create-inscription', component: CreateInscriptionComponent },
-  { path: 'question', component: QuestionComponent },
+  { path: 'question/:token', component: QuestionComponent },
   { path: '**', redirectTo: 'login', pathMatch: 'full'}
 ], { useHash: true })
 

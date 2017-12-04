@@ -3,6 +3,7 @@ import { Router } from "@angular/router";
 import InscriptionService from '../services/inscription.service';
 import CourseService from '../services/course.service';
 import SubjectService from '../services/subject.service';
+import AuthService from '../services/auth.service';
 
 @Component({
   selector: 'app-view',
@@ -26,7 +27,7 @@ import SubjectService from '../services/subject.service';
 			    <router-outlet></router-outlet>
 			</div>`,
   styleUrls: ['./assets/styles.css'],
-  providers: [ InscriptionService, CourseService, SubjectService ]
+  providers: [ InscriptionService, CourseService, SubjectService, AuthService ]
 })
 export default class AppComponent {
   constructor(router) { 

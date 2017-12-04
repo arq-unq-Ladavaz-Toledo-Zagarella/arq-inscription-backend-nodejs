@@ -1,9 +1,10 @@
 import { Component } from '@angular/core';
 import { Http, Response, Headers } from '@angular/http';
-import { Router } from "@angular/router";
+import { Router, ActivatedRoute } from "@angular/router";
 import CourseService from '../services/course.service';
 import InscriptionService from '../services/inscription.service';
 import SubjectService from '../services/subject.service';
+import AuthService from '../services/auth.service';
 
 @Component({
   selector: 'question',
@@ -48,27 +49,24 @@ export default class QuestionComponent {
   approvedCourses= []
 
 
-  constructor(http, router, courseService, inscriptionService, subjectService) { 
+  constructor(http, router, courseService, inscriptionService, subjectService, activatedRoute, authService) { 
     this.http = http;
     this.router = router;
     this.courseService = courseService
     this.inscriptionService = inscriptionService
     this.subjectService = subjectService
+    this.activatedRoute= activatedRoute
+    this.authService= authService
   }
  
   send() { 
-    var random = Math.floor(Math.random() * 1000) + 1
     var inscription = {}
     var myCourses = []
- 
     this.selectedCourses.forEach(function(element) {
       myCourses.push(element._id)
     })
-
-    inscription.studentId = random
     inscription.courses = myCourses
-
-    this.inscriptionService.create(inscription)
+    this.inscriptionService.create(inscription, this.token)
   }
 
   selectCourse(thiscourse, i) {
@@ -114,9 +112,13 @@ export default class QuestionComponent {
   } 
 
   ngOnInit() {
-    if(sessionStorage.getItem("id") === null)
-      this.router.navigate(['/login'])
-   
+  
+    this.activatedRoute.params.subscribe(params => {
+        this.token = params['token'];
+    });
+    this.authService.accessPermitted(this.token).subscribe(result => { },error => {
+        this.router.navigate(['/login'])
+      })
     this.courses = this.courseService.courses
     this.subjects = this.subjectService.subjects
 
@@ -127,5 +129,5 @@ export default class QuestionComponent {
 }
 
 QuestionComponent.parameters = [
-  Http, Router, CourseService, InscriptionService, SubjectService
+  Http, Router, CourseService, InscriptionService, SubjectService, ActivatedRoute, AuthService
 ]

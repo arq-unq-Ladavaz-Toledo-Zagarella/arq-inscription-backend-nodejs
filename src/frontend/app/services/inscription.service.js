@@ -9,8 +9,8 @@ export default class InscriptionService {
     this._inscription= {}
   }
 
-  create(inscription) {
-    this.http.post("/inscripciones", JSON.stringify(inscription), { headers:{'Content-Type': 'application/json'}})
+  create(inscription, token) {
+    this.http.post("/inscripciones/" + token, JSON.stringify(inscription), { headers:{'Content-Type': 'application/json'}})
             .toPromise()
             .then(response => this._inscription= response.json())
             .catch(err => console.log(err))

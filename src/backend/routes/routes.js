@@ -1,5 +1,5 @@
 import express from 'express'
-
+import jwt from 'jwt-simple';
 import Career from '../models/Career.js'
 import Student from '../models/Student.js'
 import Subject from '../models/Subject.js'
@@ -8,6 +8,14 @@ import Inscription from '../models/Inscription.js'
 
 let router = express.Router()
 
+//var payload = { id: 'idDeUnStudent' };
+var secret = process.env.SECRET || 'unacontraseñadeldirector';
+// encode
+//var token = jwt.encode(payload, secret);
+//console.log(token)
+// decode
+//var decoded = jwt.decode(token, secret);
+//console.log(decoded); //=> { foo: 'bar' }
 
 //Carreras
 router.get('/carreras', (req, res, next) => {
@@ -92,7 +100,8 @@ router.param('inscripcion', (req, res, next, value) => {
     .catch(next)
 })
 
-router.post('/inscripciones', (req, res, next) => {
+router.post('/inscripciones/:token', (req, res, next) => {
+  req.body.studentId= jwt.decode(req.token, secret).id;
   const inscripcion = new Inscription(req.body)
   inscripcion.save()
   .then(inscripcion => res.json(inscripcion))
@@ -184,5 +193,31 @@ function saveParentAndChild(parent, parentProperty, child, populateProperty, res
         .catch(next)
     })
 }
+
+router.get('/acceso-permitido/:token', (req, res, next) => {
+  if (req.token) {
+    try {
+      var decoded = jwt.decode(req.token, secret);
+    } catch(e) {
+      res.sendStatus(400);
+      next()
+      return
+    }
+    Student.findById(decoded.id)
+    .then(student => {
+      if (! student ) {
+        res.sendStatus(400); 
+        next()
+      }
+      res.sendStatus(200); 
+      next()
+    })
+  }
+});
+
+router.param('token', (req, res, next, value) => {
+  req.token= value
+  next()
+})
 
 export default router
