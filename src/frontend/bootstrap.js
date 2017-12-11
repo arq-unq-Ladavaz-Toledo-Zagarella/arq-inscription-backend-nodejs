@@ -14,6 +14,10 @@ import ExampleComponent from './app/components/example.component'
 import LoginComponent from './app/components/login.component'
 import CreateInscriptionComponent from './app/components/create-inscription.component'
 import QuestionComponent from './app/components/question.component'
+import ThanksComponent from './app/components/thanks.component'
+import NavbarComponent from './app/components/navbar.component'
+import InscriptionStateComponent from './app/components/inscription-state.component'
+import CoursesStateComponent from './app/components/courses-state.component'
 
 import { RouterModule }  from '@angular/router';
 
@@ -21,6 +25,9 @@ let router = RouterModule.forRoot([
   { path: 'login', component: LoginComponent },
   { path: 'create-inscription', component: CreateInscriptionComponent },
   { path: 'question/:token', component: QuestionComponent },
+  { path: 'thanks', component: ThanksComponent },
+  { path: 'inscription-state', component: InscriptionStateComponent },
+  { path: 'courses-state', component: CoursesStateComponent },  
   { path: '**', redirectTo: 'login', pathMatch: 'full'}
 ], { useHash: true })
 
@@ -31,7 +38,11 @@ let router = RouterModule.forRoot([
     ExampleComponent,
     LoginComponent,
     CreateInscriptionComponent,
-    QuestionComponent
+    QuestionComponent,
+    ThanksComponent,
+    InscriptionStateComponent,
+    CoursesStateComponent,
+    NavbarComponent
   ],
   bootstrap: [ AppComponent ]
 })

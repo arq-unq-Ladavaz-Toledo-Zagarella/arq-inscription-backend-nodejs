@@ -104,6 +104,7 @@ export default class QuestionComponent {
     var inscription = {}
     inscription.courses = this.selectedCourses
     this.inscriptionService.create(inscription, this.token)
+    this.router.navigate(['thanks'])
   }
 
   getCourseSchedule(course) {

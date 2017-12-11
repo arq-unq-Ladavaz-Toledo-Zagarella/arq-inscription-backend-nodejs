@@ -9,6 +9,14 @@ export default class InscriptionService {
     this._inscription= {}
   }
 
+  inscriptionsTotal() {
+    return this.http.get("/total-inscripciones")
+  }
+
+  getInscriptions() {
+    return this.http.get("/inscripciones")
+  }
+
   create(inscription, token) {
     this.http.post("/inscripciones/" + token, JSON.stringify(inscription), { headers:{'Content-Type': 'application/json'}})
             .toPromise()

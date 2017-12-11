@@ -14,7 +14,7 @@ import 'rxjs/add/operator/map'
             <img src="http://www.unq.edu.ar/images/logo_unqui.png">
           </a>
           <br><br>
-          <h1>PreInscripcion</h1>
+          <h1>Pre-Inscripción</h1>
           <p>La encuesta es obligatoria, pero no vinculante. Es decir, todos tienen que completarla, pero podrían cambiar la opción en el momento de la inscripción. Les pido que completen la encuesta a conciencia. </p>
         </div>
       </div>
@@ -35,6 +35,7 @@ import 'rxjs/add/operator/map'
   styleUrls: ['./assets/styles.css']
 })
 export default class LoginComponent {
+  showNav = true
   username = "usuariodeprueba"
   password = "usuariodeprueba"
 
@@ -45,7 +46,7 @@ export default class LoginComponent {
 
   login() {
   	sessionStorage.setItem("id", 1)
-    this.router.navigate(['question'])
+    this.router.navigate(['inscription-state'])
   }
 }
 

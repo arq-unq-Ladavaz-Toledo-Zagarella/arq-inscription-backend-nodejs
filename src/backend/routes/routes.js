@@ -8,14 +8,14 @@ import Inscription from '../models/Inscription.js'
 
 let router = express.Router()
 
-//var payload = { id: 'idDeUnStudent' };
+var payload = { id: '5a2dd67cbfc3d90e00cd6c43' };
 var secret = process.env.SECRET || 'unacontraseñadeldirector';
 // encode
-//var token = jwt.encode(payload, secret);
-//console.log(token)
+var token = jwt.encode(payload, secret);
+console.log(token)
 // decode
-//var decoded = jwt.decode(token, secret);
-//console.log(decoded); //=> { foo: 'bar' }
+var decoded = jwt.decode(token, secret);
+console.log(decoded); //=> { foo: 'bar' }
 
 //Carreras
 router.get('/carreras', (req, res, next) => {
@@ -54,6 +54,12 @@ router.get('/estudiantes', (req, res, next) => {
     .catch(next)
 })
 
+router.get('/total-estudiantes', (req, res, next) => {
+  Student.count()
+    .then(estudiantes => res.json(estudiantes))
+    .catch(next)
+})
+
 router.get('/estudiantes/:estudiante', (req, res, next) => {
   res.json(req.student)
 })
@@ -80,6 +86,12 @@ router.post('/estudiantes', (req, res, next) => {
 //Formularios de inscripción
 router.get('/inscripciones', (req, res, next) => {
   Inscription.find()
+    .then(inscripciones => res.json(inscripciones))
+    .catch(next)
+})
+
+router.get('/total-inscripciones', (req, res, next) => {
+  Inscription.count()
     .then(inscripciones => res.json(inscripciones))
     .catch(next)
 })
