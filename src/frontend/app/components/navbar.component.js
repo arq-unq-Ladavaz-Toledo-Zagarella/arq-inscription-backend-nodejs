@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { Http, Response, Headers } from '@angular/http';
+import { Router } from "@angular/router";
 
 @Component({
   selector: 'navbar',
@@ -6,7 +8,7 @@ import { Component } from '@angular/core';
       <nav class="navbar navbar-toggleable-md navbar-light bg-faded id=mainNav">
         <div class="container">
           <a class="navbar-brand" href="/#/inscription-state">Estado inscripción</a>
-          <a class="navbar-brand" href="/#/courses-state">Estado comisiones</a>
+          <a class="navbar-brand" href="/#/courses-state" (click)="coursesState()">Estado comisiones</a>
           <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
           </button>
@@ -22,10 +24,17 @@ import { Component } from '@angular/core';
 })
 
 export default class NavbarComponent {
-//      <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top" id="mainNav">
 
+  constructor(http, router) { 
+    this.http = http;
+    this.router = router;
+  }
+
+  coursesState() {
+    location.reload()
+  }
 }
 
 NavbarComponent.parameters = [
-  
+   Http, Router 
 ]

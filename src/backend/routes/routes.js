@@ -120,6 +120,14 @@ router.post('/inscripciones/:token', (req, res, next) => {
   .catch(next)
 })
 
+router.delete('/inscripciones', (req, res, next) => {
+  const inscripcion = new Inscription(req.body)
+  Inscription.remove(req.body)
+    .then(inscripcion => res.json(inscripcion))
+    .catch(next)
+})
+
+
 //Materias
 router.get('/materias', (req, res, next) => {
   Subject.find()
