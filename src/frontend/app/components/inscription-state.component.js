@@ -9,12 +9,7 @@ import StudentService from '../services/student.service';
   template: `<navbar></navbar>
   <section id="datos">
   <div class="container"> 
-    <h1>Estado de la encuesta actual</h1>
-    <br><br>
-    <h3>Total alumnos: {{totalStudents}} </h3>
-    <h3>Total alumnos que contestaron: {{answeredInscriptions}} </h3>
-    <h3>Porcentaje respondieron: {{answered}} % </h3>
-    <h3>Porcentaje no respondieron: {{noAnswered}} % </h3>
+    <div id="donutchart" style="width: 900px; height: 500px;"></div>
   </div>
   </section>`,
   styleUrls: ['./assets/styles.css']
@@ -23,8 +18,6 @@ export default class InscriptionStateComponent {
 
   totalStudents= 0
   answeredInscriptions= 0
-  answered= 0
-  noAnswered= 0
 
   constructor(http, router, inscriptionService, studentService) { 
     this.http = http;
@@ -33,14 +26,33 @@ export default class InscriptionStateComponent {
     this.studentService = studentService
   }
 
+  drawInscriptionState(total, answered){
+      google.charts.load("current", {packages:["corechart"]});
+      google.charts.setOnLoadCallback(drawChart);
+      function drawChart() {
+        var data = google.visualization.arrayToDataTable([
+          ['Realizaron encuesta', 'Cantidad alumnos'],
+          ['Respondieron encuesta',     answered],
+          ['Faltan responder',     total-answered],
+        ]);
+
+        var options = {
+          title: 'Estado de la inscripción',
+          pieHole: 0.4,
+        };
+
+        var chart = new google.visualization.PieChart(document.getElementById('donutchart'));
+        chart.draw(data, options);
+      }
+  }
+
   ngOnInit() {
     this.inscriptionService.inscriptionsTotal().subscribe(result => { 
       this.answeredInscriptions= result.json()
     },error => { })
     this.studentService.studentsTotal().subscribe(result => { 
       this.totalStudents= result.json()
-      this.answered= Math.floor(this.answeredInscriptions*100/this.totalStudents)
-      this.noAnswered= 100-this.answered
+      this.drawInscriptionState(this.totalStudents, this.answeredInscriptions)
     },error => { })
   }
 
