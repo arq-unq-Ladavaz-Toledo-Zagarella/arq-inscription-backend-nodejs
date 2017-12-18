@@ -33,7 +33,7 @@ export default class InscriptionStateComponent {
         var data = google.visualization.arrayToDataTable([
           ['Realizaron encuesta', 'Cantidad alumnos'],
           ['Respondieron encuesta',     answered],
-          ['Faltan responder',     total-answered],
+          ['Faltan responder',     total-answered]
         ]);
 
         var options = {
