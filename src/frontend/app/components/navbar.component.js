@@ -5,7 +5,7 @@ import { Router } from "@angular/router";
 @Component({
   selector: 'navbar',
   template: `<!-- Navigation -->
-      <nav class="navbar navbar-toggleable-md navbar-light bg-faded id=mainNav">
+      <nav class="navbar navbar-toggleable-md navbar navbar-inverse bg-inverse id=mainNav">
         <div class="container">
           <a class="navbar-brand" href="/#/inscription-state">Estado inscripción</a>
           <a class="navbar-brand" href="/#/courses-state" (click)="coursesState()">Estado comisiones</a>

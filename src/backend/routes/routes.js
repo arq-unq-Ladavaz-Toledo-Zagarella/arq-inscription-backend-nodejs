@@ -8,14 +8,14 @@ import Inscription from '../models/Inscription.js'
 
 let router = express.Router()
 
-var payload = { id: '5a2dd67cbfc3d90e00cd6c43' };
+//var payload = { id: '5a3a3452f988371106d80c96' };
 var secret = process.env.SECRET || 'unacontraseñadeldirector';
 // encode
-var token = jwt.encode(payload, secret);
-console.log(token)
+//var token = jwt.encode(payload, secret);
+//console.log(token)
 // decode
-var decoded = jwt.decode(token, secret);
-console.log(decoded); //=> { foo: 'bar' }
+//var decoded = jwt.decode(token, secret);
+//console.log(decoded); //=> { foo: 'bar' }
 
 //Carreras
 router.get('/carreras', (req, res, next) => {
