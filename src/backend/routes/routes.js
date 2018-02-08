@@ -8,7 +8,7 @@ import Inscription from '../models/Inscription.js'
 
 let router = express.Router()
 
-//var payload = { id: '5a3a3452f988371106d80c96' };
+//var payload = { id: '5a7c704d4aa361232cbb0d25' };
 var secret = process.env.SECRET || 'unacontraseñadeldirector';
 // encode
 //var token = jwt.encode(payload, secret);
@@ -140,7 +140,7 @@ router.get('/materiasycursos', (req, res, next) => {
     Course.populate(subjects, {path: "courses"}, function(err, subjects) {
       res.status(200).send(subjects)
     })
-  })
+  }).sort( { suggestedSemester: 1 })
 })
 
 router.get('/materias/:materia', (req, res, next) => {

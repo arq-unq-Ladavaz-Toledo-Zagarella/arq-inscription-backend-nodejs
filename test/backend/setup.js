@@ -31,7 +31,7 @@ export async function createMockData() {
 		const mockData = {}
 
 		mockData.career1 = await new Career({ name: "Career1", subjects: []}).save()
-		mockData.subject1 = await new Subject({ name: "Subject1", courses: [], career: mockData.career1 }).save()
+		mockData.subject1 = await new Subject({ name: "Subject1", suggestedSemester: 1,courses: [], career: mockData.career1 }).save()
 		mockData.student1 = await new Student({ name: "Student1", studentId: 1, approvedSubjects: ["Mate 1"] }).save()
 		mockData.inscription1 = await new Inscription({ courses: [], studentId: 1}).save()
 		mockData.course1 = await new Course({ name: "Course1", quota: 23, days: ["Lunes", "Jueves"], startTime: "18", endTime: "22", subject: mockData.subject1 }).save()

@@ -36,6 +36,7 @@ describe("routes", () => {
 
         response.body.should.have.property("_id")
         response.body.should.have.property("name").equal("Subject1")
+        response.body.should.have.property("suggestedSemester").equal(1)
         response.body.should.have.property("courses").with.lengthOf(1)
         response.body.should.have.property("career").equal(mockData.career1._id.toString())
       })
@@ -55,11 +56,12 @@ describe("routes", () => {
     it("Should return the object of the newly created subject", async() => {
       const response = await request(app)
             .post("/carreras/" + mockData.career1._id + "/materias")
-            .send({ name: "Subject4" })
+            .send({ name: "Subject4", suggestedSemester: 1 })
             .expect(200)
       response.body.should.be.a('object')
       response.body.should.have.property("_id")
       response.body.should.have.property("name", "Career1")
+      response.body.should.have.property("suggestedSemester")
       response.body.should.have.property("subjects").with.lengthOf(2)
     })
 
@@ -74,6 +76,7 @@ describe("routes", () => {
 
       found.should.have.property("_id")
       found.should.have.property("name").equal("Subject5")
+      found.should.have.property("suggestedSemester").equal(1)
       found.should.have.property("courses").with.lengthOf(0)
     })
 
@@ -92,7 +95,7 @@ describe("routes", () => {
     it("Newer subject should be returned on /GET materias", async() => {
       const response = await request(app)
             .post("/carreras/" + mockData.career1._id + "/materias")
-            .send({ name: "Subject6" })
+            .send({ name: "Subject6" , suggestedSemester: 1})
             .expect(200)
 
       const response2 = await request(app)

@@ -25,6 +25,7 @@ describe("Subject model object", () => {
 	it("should store all fields", async() => {
 		const subject = new Subject({
 			name: "Name of subject",
+			suggestedSemester: 1,
 			courses: [],
 			career: parentCareer
 		})
@@ -34,6 +35,7 @@ describe("Subject model object", () => {
 		should.exist(saved)
 		saved.should.have.property("_id")
 		saved.should.have.property("name").equal("Name of subject")
+	    saved.should.have.property("suggestedSemester").equal(1)
 		saved.should.have.property("career").that.has.property("_id").equal(parentCareer._id)
         saved.should.have.property("courses").that.has.lengthOf(0) 
 	})
