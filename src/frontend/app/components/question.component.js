@@ -22,7 +22,11 @@ import AuthService from '../services/auth.service';
             <fieldset class="form-group row">
               <li class="list-group-item"> 
                 <h2>{{subject.name}}</h2>
-                <h5>{{getSubjectSchedule(subject)}}</h5>
+                <ul>    
+                  <h5 *ngFor="let schedule of subject.schedule">
+                    {{ schedule }}
+                   </h5>
+                </ul>
                 <div class="btn-group">
                   <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     {{getValueForThisDropdown(subject._id)}}
@@ -120,12 +124,11 @@ export default class QuestionComponent {
   }
 
   getSubjectSchedule(subject) {
-    var schedules = ""
+    subject.schedule = []
     var i = 0
     for (; i < subject.courses.length; i++) {
-      schedules += this.getCourseSchedule(subject.courses[i])
+      subject.schedule.push(this.getCourseSchedule(subject.courses[i]))
     }
-    return schedules
   } 
 
   ngOnInit() {
@@ -139,10 +142,14 @@ export default class QuestionComponent {
     this.subjectService.subjects().subscribe(result => { 
       this.subjects= result.json()
       this.courses = this.subjects.filter(subject => subject.courses)
+      for (var i in this.subjects) {
+        this.getSubjectSchedule(this.subjects[i])  
+      }
       this.initValueDropdowns()
     },error => { })
     this.selectedCourses= []
     this.approvedCourses= []
+
   }
 
   initValueDropdowns() {
