@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { Http, Response, Headers } from '@angular/http';
 import { Router, ActivatedRoute } from "@angular/router";
-import CourseService from '../services/course.service';
 import InscriptionService from '../services/inscription.service';
 import SubjectService from '../services/subject.service';
 import AuthService from '../services/auth.service';
@@ -55,10 +54,9 @@ export default class QuestionComponent {
   approvedSubjects= []
   valuesDropdowns= []
 
-  constructor(http, router, courseService, inscriptionService, subjectService, activatedRoute, authService) { 
+  constructor(http, router,inscriptionService, subjectService, activatedRoute, authService) { 
     this.http = http;
     this.router = router;
-    this.courseService = courseService
     this.inscriptionService = inscriptionService
     this.subjectService = subjectService
     this.activatedRoute= activatedRoute
@@ -125,7 +123,7 @@ export default class QuestionComponent {
     var schedules = ""
     var i = 0
     for (; i < subject.courses.length; i++) {
-      schedules += this.getCourseSchedule(subject.courses[i]) 
+      schedules += this.getCourseSchedule(subject.courses[i])
     }
     return schedules
   } 
@@ -137,9 +135,10 @@ export default class QuestionComponent {
     this.authService.accessPermitted(this.token).subscribe(result => { },error => {
         this.router.navigate(['/login'])
       })
-    this.courses = this.courseService.courses
+    
     this.subjectService.subjects().subscribe(result => { 
       this.subjects= result.json()
+      this.courses = this.subjects.filter(subject => subject.courses)
       this.initValueDropdowns()
     },error => { })
     this.selectedCourses= []
@@ -168,5 +167,5 @@ export default class QuestionComponent {
 }
 
 QuestionComponent.parameters = [
-  Http, Router, CourseService, InscriptionService, SubjectService, ActivatedRoute, AuthService
+  Http, Router,  InscriptionService, SubjectService, ActivatedRoute, AuthService
 ]

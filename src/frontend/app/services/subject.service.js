@@ -3,14 +3,10 @@ import { Http } from '@angular/http';
 
 @Injectable()
 export default class SubjectService {
-	
-	constructor(http) {
+  
+  constructor(http) {
     this.http = http
-    this._subjects = []
-    this.http.get("/materiasycursos").toPromise()
-            .then(response => this._subjects.push(...response.json()))
-            .catch(err => console.log(err))
-  }
+   }
 
   subjects() {
     return this.http.get("/materiasycursos")
