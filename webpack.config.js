@@ -1,5 +1,9 @@
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 var CopyWebpackPlugin = require('copy-webpack-plugin');
+const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
+
+
+
 
 module.exports = {
     entry: './src/frontend/bootstrap.js',
@@ -21,6 +25,8 @@ module.exports = {
 
     // inject js reference bundle to index.html
     plugins: [
+      new UglifyJSPlugin({sourceMap: true}),
+
       new HtmlWebpackPlugin({
         template: './src/frontend/index.html',
         inject: 'body',
@@ -32,5 +38,5 @@ module.exports = {
       }])
     ],
 
-    devtool: '#inline-source-map'
+    
 }
