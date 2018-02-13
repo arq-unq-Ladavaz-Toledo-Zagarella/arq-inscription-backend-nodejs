@@ -7,8 +7,8 @@ import { Router } from "@angular/router";
   template: `<!-- Navigation -->
       <nav class="navbar navbar-toggleable-md navbar navbar-inverse bg-inverse id=mainNav">
         <div class="container">
-          <a class="navbar-brand" href="/#/inscription-state">Estado inscripción</a>
-          <a class="navbar-brand" href="/#/courses-state" (click)="coursesState()">Estado comisiones</a>
+          <a class="navbar-brand" href="/#/inscription-state" (click)="reloadData()">Estado inscripción</a>
+          <a class="navbar-brand" href="/#/courses-state" (click)="reloadData()">Estado comisiones</a>
           <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
           </button>
@@ -30,7 +30,7 @@ export default class NavbarComponent {
     this.router = router;
   }
 
-  coursesState() {
+  reloadData() {
     location.reload()
   }
 }

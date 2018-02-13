@@ -2,7 +2,6 @@ import { Component } from '@angular/core';
 import { Http, Response, Headers } from '@angular/http';
 import { Router } from "@angular/router";
 import InscriptionService from '../services/inscription.service';
-import StudentService from '../services/student.service';
 
 @Component({
   selector: 'inscription-state',
@@ -16,6 +15,7 @@ import StudentService from '../services/student.service';
 })
 export default class InscriptionStateComponent {
 
+  inscriptionProgress = []
   totalStudents= 0
   answeredInscriptions= 0
 
@@ -23,7 +23,6 @@ export default class InscriptionStateComponent {
     this.http = http;
     this.router = router;
     this.inscriptionService = inscriptionService
-    this.studentService = studentService
   }
 
   drawInscriptionState(total, answered){
@@ -46,12 +45,15 @@ export default class InscriptionStateComponent {
       }
   }
 
+  loadResults(){
+    this.totalStudents = this.inscriptionProgress.totalStudents
+    this.answeredInscriptions = this.inscriptionProgress.totalInscriptions
+  }
+
   ngOnInit() {
-    this.inscriptionService.inscriptionsTotal().subscribe(result => { 
-      this.answeredInscriptions= result.json()
-    },error => { })
-    this.studentService.studentsTotal().subscribe(result => { 
-      this.totalStudents= result.json()
+    this.inscriptionService.getInscriptionProgress().subscribe(result => { 
+      this.inscriptionProgress = result.json()
+      this.loadResults()
       this.drawInscriptionState(this.totalStudents, this.answeredInscriptions)
     },error => { })
   }
@@ -59,5 +61,5 @@ export default class InscriptionStateComponent {
 }
 
 InscriptionStateComponent.parameters = [
-  Http, Router, InscriptionService, StudentService
+  Http, Router, InscriptionService
 ]

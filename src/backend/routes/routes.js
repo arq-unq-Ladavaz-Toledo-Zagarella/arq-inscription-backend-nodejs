@@ -127,6 +127,21 @@ router.delete('/inscripciones', (req, res, next) => {
     .catch(next)
 })
 
+//Progreso encuesta
+router.get('/progreso-encuesta', (req, res, next) => {
+  const progreso = {}
+  Inscription.count()
+    .then(inscripciones => {
+      progreso.totalInscriptions = inscripciones
+      Student.count()
+        .then(alumnos => {
+          progreso.totalStudents = alumnos
+          res.json(progreso)
+        })
+        .catch(next)
+      })
+  .catch(next)
+})
 
 //Materias
 router.get('/materias', (req, res, next) => {

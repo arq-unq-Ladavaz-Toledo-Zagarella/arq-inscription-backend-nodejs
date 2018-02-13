@@ -17,6 +17,10 @@ export default class InscriptionService {
     return this.http.get("/inscripciones")
   }
 
+  getInscriptionProgress() {
+    return this.http.get("/progreso-encuesta")
+  }
+
   create(inscription, token) {
     this.http.post("/inscripciones/" + token, JSON.stringify(inscription), { headers:{'Content-Type': 'application/json'}})
             .toPromise()
