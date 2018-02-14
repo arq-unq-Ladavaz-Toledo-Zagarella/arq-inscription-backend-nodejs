@@ -182,6 +182,30 @@ router.post('/carreras/:carrera/materias', (req, res, next) => {
 })
 
 //Cursos
+router.get('/inscribir-curso/:curso', (req, res, next) => {
+  const curso = req.course
+  Course.update( 
+     { _id: curso._id },
+     {
+       $inc: { inscripted: 1 }
+     }
+  )
+  .then(curso => res.json(curso))
+  .catch(next)
+})
+
+router.get('/cancelar-inscripcion-curso/:curso', (req, res, next) => {
+  const curso = req.course
+  Course.update( 
+     { _id: curso._id },
+     {
+       $set: { inscripted: curso.inscripted-1 }
+     }
+  )
+  .then(curso => res.json(curso))
+  .catch(next)
+})
+
 router.get('/cursos', (req, res, next) => {
   Course.find()
     .then(cursos => res.json(cursos))

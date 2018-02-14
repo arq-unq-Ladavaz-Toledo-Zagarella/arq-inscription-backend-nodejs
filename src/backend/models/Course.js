@@ -4,6 +4,7 @@ import mongoose from 'mongoose'
 const commentSchema = new mongoose.Schema({
   name: String,
   quota: Number,
+  inscripted: Number,
   days: [ String ],
   startTime: String,
   endTime: String,

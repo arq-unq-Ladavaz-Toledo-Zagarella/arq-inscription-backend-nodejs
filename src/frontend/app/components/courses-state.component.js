@@ -1,8 +1,6 @@
 import { Component } from '@angular/core';
 import { Http, Response, Headers } from '@angular/http';
 import { Router } from "@angular/router";
-import CourseService from '../services/course.service';
-import InscriptionService from '../services/inscription.service';
 import SubjectService from '../services/subject.service';
 
 @Component({
@@ -20,33 +18,14 @@ import SubjectService from '../services/subject.service';
 })
 export default class CoursesStateComponent {
   subjects= []
-  inscriptions= []
-  inscriptedInCourses= []
 
-  constructor(http, router, courseService, inscriptionService, subjectService) { 
+  constructor(http, router, subjectService) { 
     this.http = http;
     this.router = router;
-    this.courseService = courseService
-    this.inscriptionService = inscriptionService
     this.subjectService = subjectService
   } 
 
-  calculateInscripted(inscriptions) {
-      for (var i in inscriptions) {
-        for (var j in inscriptions[i].courses){
-          var unId = inscriptions[i].courses[j]
-          if (this.inscriptedInCourses[unId] === undefined) { 
-            this.inscriptedInCourses[unId] = 1         
-          }
-          else{
-            var cant = this.inscriptedInCourses[unId] 
-            this.inscriptedInCourses[unId] = cant + 1
-          } 
-        }
-      }
-  }
-
-  drawCourseStateTable(mysubjects, myinscriptedInCourses) {
+  drawCourseStateTable(mysubjects) {
     google.charts.load('current', {'packages':['table']});
     google.charts.setOnLoadCallback(drawTable);
 
@@ -73,13 +52,13 @@ export default class CoursesStateComponent {
           if (!(mysubjects[i].courses[j] === undefined)) {
             if(quota1 == 0){
               quota1 = mysubjects[i].courses[j].quota
-              var inc1 = myinscriptedInCourses[mysubjects[i].courses[j]._id]
+              var inc1 = mysubjects[i].courses[j].inscripted
               if(!(inc1 === undefined)){
                 inscripted1 = inc1
               }
             }else{
               quota2 = mysubjects[i].courses[j].quota
-              var inc2 = myinscriptedInCourses[mysubjects[i].courses[j]._id]  
+              var inc2 = mysubjects[i].courses[j].inscripted
               if(!(inc2 === undefined)){
                 inscripted2 = inc2
               }
@@ -111,18 +90,14 @@ export default class CoursesStateComponent {
   }
 
   ngOnInit() {  
-    this.inscriptionService.getInscriptions().subscribe(result => { 
-      this.inscriptions= result.json()
-    },error => { }) 
     this.subjectService.subjects().subscribe(result => { 
       this.subjects= result.json()
-      this.calculateInscripted(this.inscriptions)
-      this.drawCourseStateTable(this.subjects, this.inscriptedInCourses)
+      this.drawCourseStateTable(this.subjects)
     },error => { })
   }
 
 }
 
 CoursesStateComponent.parameters = [
-  Http, Router, CourseService, InscriptionService, SubjectService
+  Http, Router, SubjectService
 ]

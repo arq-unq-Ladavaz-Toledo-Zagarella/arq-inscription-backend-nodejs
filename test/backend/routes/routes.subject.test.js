@@ -61,14 +61,13 @@ describe("routes", () => {
       response.body.should.be.a('object')
       response.body.should.have.property("_id")
       response.body.should.have.property("name", "Career1")
-      response.body.should.have.property("suggestedSemester")
       response.body.should.have.property("subjects").with.lengthOf(2)
     })
 
     it("Should save the subject in the database", async() => {
       const response = await request(app)
             .post("/carreras/" + mockData.career1._id + "/materias")
-            .send({ name: "Subject5" })
+            .send({ name: "Subject5" , suggestedSemester: 1})
             .expect(200)
       
       const found = await Subject.findById(response.body.subjects[1]._id)

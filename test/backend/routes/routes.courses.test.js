@@ -37,6 +37,7 @@ describe("routes", () => {
         response.body.should.have.property("_id")
         response.body.should.have.property("name").equal("Course1")
         response.body.should.have.property("quota").equal(23)
+        response.body.should.have.property("inscripted").equal(0)        
         response.body.should.have.property("startTime").equal("18")
         response.body.should.have.property("endTime").equal("22")        
         response.body.should.have.property("days").with.lengthOf(2)
@@ -58,7 +59,7 @@ describe("routes", () => {
     it("Should return the object of the newly created course", async() => {
       const response = await request(app)
             .post("/materias/" + mockData.subject1._id + "/cursos")
-            .send({ name: "Course2", quota: 2, days: ["Lunes"], startTime: "18", endTime: "22" })
+            .send({ name: "Course2", quota: 2, inscripted: 0, days: ["Lunes"], startTime: "18", endTime: "22" })
             .expect(200)
       response.body.should.be.a('object')
       response.body.should.have.property("_id")
@@ -69,7 +70,7 @@ describe("routes", () => {
     it("Should save the course in the database", async() => {
       const response = await request(app)
             .post("/materias/" + mockData.subject1._id + "/cursos")
-            .send({ name: "Course3", quota: 22, days: ["Lunes"], startTime: "18", endTime: "22" })
+            .send({ name: "Course3", quota: 22, inscripted: 0, days: ["Lunes"], startTime: "18", endTime: "22" })
             .expect(200)
       
       const found = await Course.findById(response.body.courses[1]._id)
@@ -78,6 +79,7 @@ describe("routes", () => {
       found.should.have.property("_id")
       found.should.have.property("name").equal("Course3")
       found.should.have.property("quota").equal(22)
+      found.should.have.property("inscripted").equal(0)
       found.should.have.property("startTime").equal("18")
       found.should.have.property("endTime").equal("22")        
       found.should.have.property("days").with.lengthOf(1)
@@ -87,7 +89,7 @@ describe("routes", () => {
     it("Should add the course to the parent subject", async() => {
       const response = await request(app)
             .post("/materias/" + mockData.subject1._id + "/cursos")
-            .send({ name: "Course4", quota: 12, days: ["Lunes", "Viernes"], startTime: "17", endTime: "21" })
+            .send({ name: "Course4", quota: 12, inscripted: 0, days: ["Lunes", "Viernes"], startTime: "17", endTime: "21" })
             .expect(200)
       
       const found = await Subject.findById(mockData.subject1._id)
@@ -99,7 +101,7 @@ describe("routes", () => {
     it("Newer subject should be returned on /GET cursos", async() => {
       const response = await request(app)
             .post("/materias/" + mockData.subject1._id + "/cursos")
-            .send({ name: "Course5", quota: 12, days: ["Viernes"], startTime: "17", endTime: "21" })
+            .send({ name: "Course5", quota: 12, inscripted:0, days: ["Viernes"], startTime: "17", endTime: "21" })
             .expect(200)
 
       const response2 = await request(app)
