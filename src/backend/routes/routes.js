@@ -8,7 +8,7 @@ import Inscription from '../models/Inscription.js'
 
 let router = express.Router()
 
-//var payload = { id: '5a7c704d4aa361232cbb0d25' };
+//var payload = { id: '5a8403ec9820221a9e689d24' };
 var secret = process.env.SECRET || 'unacontraseñadeldirector';
 // encode
 //var token = jwt.encode(payload, secret);
@@ -113,10 +113,23 @@ router.param('inscripcion', (req, res, next, value) => {
 })
 
 router.post('/inscripciones/:token', (req, res, next) => {
-  req.body.studentId= jwt.decode(req.token, secret).id;
+  req.body.studentId = jwt.decode(req.token, secret).id;
   const inscripcion = new Inscription(req.body)
   inscripcion.save()
   .then(inscripcion => res.json(inscripcion))
+  .catch(next)
+})
+
+router.post('/editar-inscripcion/:inscripcion', (req, res, next) => {
+  const inscripcionId = req.inscription
+  const selectedSubjects = req.body.courses
+  Inscription.update(
+    { _id: inscripcionId },
+    {
+      $set: { courses: selectedSubjects }
+    }
+  )
+  .then(inscripcionId => res.json(inscripcionId))
   .catch(next)
 })
 
@@ -141,6 +154,25 @@ router.get('/progreso-encuesta', (req, res, next) => {
         .catch(next)
       })
   .catch(next)
+})
+
+router.get('/contesto-encuesta/:token', (req, res, next) => {
+  if (req.token) {
+    try {
+      var decoded = jwt.decode(req.token, secret);
+    } catch(e) {
+      res.sendStatus(400);
+      next()
+      return
+    }
+    Inscription.find(
+      { studentId: decoded.id }
+    )
+    .then(inscription => {
+      res.json(inscription); 
+      next()
+    })
+  }
 })
 
 //Materias

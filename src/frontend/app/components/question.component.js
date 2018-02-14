@@ -33,7 +33,6 @@ import AuthService from '../services/auth.service';
                   </button>
                   <div class="dropdown-menu">
                     <button class="dropdown-item" (click)="unselect(subject)">Todavía no la voy a cursar</button>
-                    <button class="dropdown-item" (click)="approved(subject)">Ya la aprobé</button>
                     <button class="dropdown-item" *ngFor="let thiscourse of subject.courses" (click)="selectCourse(thiscourse)">Cursaría en comisión {{thiscourse.name}}</button>
                   </div>
                 </div>
@@ -57,6 +56,8 @@ export default class QuestionComponent {
   approvedCourses= []
   approvedSubjects= []
   valuesDropdowns= []
+  alreadyAnswered= []
+  editingInscription= false
 
   constructor(http, router,inscriptionService, subjectService, activatedRoute, authService) { 
     this.http = http;
@@ -105,7 +106,21 @@ export default class QuestionComponent {
   send() { 
     var inscription = {}
     inscription.courses = this.selectedCourses
-    this.inscriptionService.create(inscription, this.token)
+
+    if(this.editingInscription){
+      for (var i in this.alreadyAnswered[0].courses) {
+        this.inscriptionService.removeStudentFromCourse(this.alreadyAnswered[0].courses[i]).
+        subscribe(result => { },error => { }) 
+      }
+      this.inscriptionService.edit(inscription, this.alreadyAnswered[0]._id)
+    }
+    else{
+      this.inscriptionService.create(inscription, this.token)
+    }
+    for (var j in inscription.courses) {
+      this.inscriptionService.addStudentToCourse(inscription.courses[j]).
+      subscribe(result => { },error => { })
+    }
     this.router.navigate(['thanks'])
   }
 
@@ -131,28 +146,45 @@ export default class QuestionComponent {
     }
   } 
 
-  ngOnInit() {
-    this.activatedRoute.params.subscribe(params => {
-        this.token = params['token'];
-    });
-    this.authService.accessPermitted(this.token).subscribe(result => { },error => {
-        this.router.navigate(['/login'])
-      })
-    
-    this.subjectService.subjects().subscribe(result => { 
-      this.subjects= result.json()
-      this.courses = this.subjects.filter(subject => subject.courses)
-      for (var i in this.subjects) {
-        this.getSubjectSchedule(this.subjects[i])  
-      }
-      this.initValueDropdowns()
-    },error => { })
-    this.selectedCourses= []
-    this.approvedCourses= []
-
+  initValueDropdowns() {
+    if(this.alreadyAnswered.length>0){
+      this.editingInscription = true
+      this.initEditedDropdowns()
+      alert("Acepte para editar la encuesta previamente realizada")
+    }else{
+      this.initDefaultDropdowns()
+    }
   }
 
-  initValueDropdowns() {
+  initEditedDropdowns() {
+    for (var i in this.subjects) {
+      this.completeDropdownBySubject(this.subjects[i])
+    }
+  }
+
+  completeDropdownBySubject(aSubject){
+    var wasSelected = false
+    var i = 0
+    for (; i < aSubject.courses.length; i++) {
+      var cont = this.alreadyAnswered[0].courses.includes(aSubject.courses[i]._id)
+      if(cont){
+        if(aSubject.courses[i].name=='C1'){
+          this.valuesDropdowns.push({idSubject: aSubject._id, value: "Cursaría en comisión C1"})
+        }
+        else{
+          this.valuesDropdowns.push({idSubject: aSubject._id, value: "Cursaría en comisión C2"})
+        }
+        this.selectCourse(aSubject.courses[i])
+        wasSelected = true
+        break
+      }
+    }
+    if(!wasSelected){
+      this.valuesDropdowns.push({idSubject: aSubject._id, value: "Todavía no la voy a cursar"})
+    }
+  }
+
+  initDefaultDropdowns() {
     for (var i = 0; i < this.subjects.length; i++) {
       this.valuesDropdowns.push({idSubject: this.subjects[i]._id, value: "Todavía no la voy a cursar"})
     }
@@ -171,6 +203,31 @@ export default class QuestionComponent {
         this.valuesDropdowns[i].value= newValue
     }
   }
+
+  ngOnInit() {
+    this.activatedRoute.params.subscribe(params => {
+        this.token = params['token'];
+    })
+    this.authService.accessPermitted(this.token).subscribe(result => { },error => {
+        this.router.navigate(['/login'])
+    })
+    this.inscriptionService.inscriptionByToken(this.token).subscribe(result => { 
+      this.alreadyAnswered = result.json()
+    },error => {}) 
+    
+    this.selectedCourses= []
+    this.subjectService.subjects().subscribe(result => { 
+      this.subjects= result.json()
+      this.courses = this.subjects.filter(subject => subject.courses)
+      for (var i in this.subjects) {
+        this.getSubjectSchedule(this.subjects[i])  
+      }
+      this.initValueDropdowns()
+    },error => { })
+    this.approvedCourses= []
+
+  }
+
 }
 
 QuestionComponent.parameters = [

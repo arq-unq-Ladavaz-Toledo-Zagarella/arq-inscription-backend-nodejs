@@ -21,8 +21,27 @@ export default class InscriptionService {
     return this.http.get("/progreso-encuesta")
   }
 
+  inscriptionByToken(token) {
+    return this.http.get("/contesto-encuesta/" + token)
+  }
+
+  addStudentToCourse(inscription) {
+    return this.http.get("/inscribir-curso/" + inscription._id)
+  }
+
+  removeStudentFromCourse(inscription) {
+     return this.http.get("/cancelar-inscripcion-curso/" + inscription)
+  }
+
   create(inscription, token) {
     this.http.post("/inscripciones/" + token, JSON.stringify(inscription), { headers:{'Content-Type': 'application/json'}})
+            .toPromise()
+            .then(response => this._inscription= response.json())
+            .catch(err => console.log(err))
+  }
+
+  edit(inscription, inscriptionid) {
+    this.http.post("/editar-inscripcion/" + inscriptionid, JSON.stringify(inscription), { headers:{'Content-Type': 'application/json'}})
             .toPromise()
             .then(response => this._inscription= response.json())
             .catch(err => console.log(err))
