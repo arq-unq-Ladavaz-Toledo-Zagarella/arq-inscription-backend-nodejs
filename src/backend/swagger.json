@@ -1,0 +1,112 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "title": "Arquitectura 2 - Pre Inscripcion",
+         "version" : "1.0"
+    },
+    "tags":[
+        {
+            "name": "Pre Inscripcion"
+           
+        }
+    ],
+    "produces": [
+        "application/json"
+    ],
+    "host": "localhost:3001",
+    "basePath": "/",
+    "paths": {
+          "/carreras": {
+            "get": {
+                "summary": "Obtiene todas las carreras",
+                "description": "Permite consultar las carreras",
+                "x-swagger-router-controller": "routes",
+                "operationId": "get",
+                "tags": ["Carreras"],
+                "responses": {
+                    "200": {
+                        "description": "Operación exitosa",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/carrera"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Error interno del servidor"
+                    }
+                }
+            },
+            "post": {
+                "summary": "Guarda una carrera",
+                "description": "Permite guardar una carrera",
+                "x-swagger-router-controller": "routes",
+                "operationId": "post",
+                "tags": ["Carreras"],
+                "responses": {
+                    "200": {
+                        "description": "Operación exitosa",
+                        "schema": {
+                            "type": "object"
+                        }
+                    },
+                    "500": {
+                        "description": "Error interno del servidor"
+                    }
+                }
+            }
+          },
+		  
+          "/estudiantes": {
+            "get": {
+                "summary": "Obtiene todos los estudiantes",
+                "description": "Permite consultar los estudiantes",
+                "x-swagger-router-controller": "routes",
+                "operationId": "get",
+                "tags": ["Estudiantes"],
+                "responses": {
+                    "200": {
+                        "description": "Operación exitosa",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/estudiante"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Error interno del servidor"
+                    }
+                }
+            }
+          }
+        },
+        "definitions": {
+            "carrera": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "string"
+                    },
+                    "name": {
+                        "type": "string"
+                    }
+                }
+            },
+            "estudiante": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "string"
+                    },
+                    "name": {
+                        "type": "string"
+                    },
+                    "materias": {
+                        "type": "string"
+                    }
+                }
+            }
+        }
+}
