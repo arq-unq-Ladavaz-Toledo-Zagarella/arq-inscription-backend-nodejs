@@ -21,3 +21,13 @@
  
  [MongoDB]: <https://www.mongodb.com/>
  [Node.js]: <https://nodejs.org/es/>
+
+
+ ### Build de Travis
+
+https://travis-ci.org/arq-unq-Ladavaz-Toledo-Zagarella/arq-inscription-backend-nodejs.svg?branch=master
+
+
+ ### Link de Dockerhub con la última versión estable
+
+https://hub.docker.com/r/zagarojo23/arq-inscription-backend-nodejs-stable/tags/
