@@ -1,7 +1,7 @@
 import express from 'express'
 import bodyParser from 'body-parser'
 
-// Express configuration
+//Express configuration
 const app = express()
 app.use(bodyParser.json())
 
