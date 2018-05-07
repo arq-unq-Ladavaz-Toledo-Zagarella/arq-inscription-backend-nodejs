@@ -41,13 +41,23 @@ gulp.task('frontend-components', function(done) {
 	}, done).start()
 })
 
+gulp.task('frontend-e2e', () => {
+	return gulp.src(['test/e2e/*.test.js'])
+		.pipe(protractor({
+			configFile: "protractor.conf.js"
+		}))
+})
+
 gulp.task('webpack', () => {
 	return gulp.src(['src/frontend/**/*.js'])
 		.pipe(gulpWebpack(webpackConfig, webpack))
 		.pipe(gulp.dest('dist/frontend/'))
 })
 
+
 gulp.task('build', ['transpile', 'webpack'])
+
+gulp.task('frontend-all', ['frontend-components', 'frontend-e2e'])
 
 gulp.task('all', ['backend', 'frontend-all'])
 

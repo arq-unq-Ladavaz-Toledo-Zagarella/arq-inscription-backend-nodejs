@@ -1,0 +1,33 @@
+version: '2'
+services:
+ mongo:
+   image: mongo
+   ports:
+     - "27018:27017"
+   command: "--smallfiles --logpath=/dev/null"
+
+ app:
+   build: .
+   ports:
+     - "3001:3001"
+   links:
+     - mongo
+   environment:
+     MONGO_URL: 'mongodb://mongo/projects'
+
+ webdriver:
+   image: 'selenium/standalone-chrome:latest'
+   logging:
+     driver: 'none'
+   ports:
+     - "4444:4444"
+ e2e:
+   build: .
+   command: 'gulp frontend-e2e'
+   depends_on:
+     - webdriver
+     - app
+   environment:
+     MONGO_URL: 'mongodb://mongo/projects'
+     SERVER_URL: 'http://app:3001'
+     WEBDRIVER_URL: 'http://webdriver:4444/wd/hub/'
