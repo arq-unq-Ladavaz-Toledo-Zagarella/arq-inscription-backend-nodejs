@@ -28,7 +28,7 @@ before_script:
   - . ./dockerhub.sh
 
 script:
-  - gulp all-non-e2e
+  - gulp backend
   - docker build -t $DOCKER_USERNAME/arq-inscription-backend-nodejs-$(repoName) .
   - docker-compose run e2e
 
