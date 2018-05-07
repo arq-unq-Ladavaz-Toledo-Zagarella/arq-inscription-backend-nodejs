@@ -9,6 +9,6 @@ describe("A default test", () => {
 
     const test = "test"
 
-    taskFounded.should.be.equal("test")
+    test.should.be.equal("test")
   })
 })
