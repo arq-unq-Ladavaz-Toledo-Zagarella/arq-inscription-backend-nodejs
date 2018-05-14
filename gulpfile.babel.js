@@ -38,7 +38,9 @@ gulp.task('frontend-components', function(done) {
 	new Server({
 		configFile: __dirname + '/karma.conf.js',
 		singleRun: true
-	}, done).start()
+	}, function() {
+        done();
+    }).start()
 })
 
 gulp.task('frontend-e2e', () => {

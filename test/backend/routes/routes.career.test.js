@@ -17,14 +17,14 @@ describe("routes", () => {
     mockData = await createMockData()
   })
 
-  /*describe("GET /carreras", () => {
+  describe("GET /carreras", () => {
     it("Should return the existing project", async() => {
       const response = await request(app)
             .get("/carreras")
             .expect(200)
       response.body.should.have.lengthOf(1)
     })
-  })*/
+  })
 
   describe("GET /carreras/:carrera", () => {
     context("When querying an existing career id", () => {
