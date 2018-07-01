@@ -1,0 +1,17 @@
+{
+ "name": "autocannon-as-a-service",
+ "version": "1.0.0",
+ "main": "server.js",
+ "scripts": {},
+ "keywords": [],
+ "author": "",
+ "license": "ISC",
+ "description": "",
+ "devDependencies": {},
+ "dependencies": {
+   "autocannon": "^2.4.1"
+ },
+ "engines": {
+   "node": "8.9.1"
+ }
+}
