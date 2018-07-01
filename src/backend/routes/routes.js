@@ -8,7 +8,7 @@ import Inscription from '../models/Inscription.js'
 
 let router = express.Router()
 
-//var payload = { id: '5a8403ec9820221a9e689d24' };
+//var payload = { id: '5a7c704d4aa361232cbb0d25' };
 var secret = process.env.SECRET || 'unacontraseñadeldirector';
 // encode
 //var token = jwt.encode(payload, secret);
@@ -205,6 +205,14 @@ router.param('materia', (req, res, next, value) => {
     })
     .catch(next)
 })
+
+router.delete('/materias', (req, res, next) => {
+  const materia = new Subject(req.body)
+  Subject.remove(req.body)
+    .then(materia => res.json(materia))
+    .catch(next)
+})
+
 
 router.post('/carreras/:carrera/materias', (req, res, next) => {
   const career = req.career

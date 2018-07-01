@@ -9,8 +9,10 @@ import { Router } from "@angular/router";
       <img src="http://www.unq.edu.ar/images/logo_unqui.png">
     </a>
     <br><br>
-    <h1>¡Felicitaciones!</h1>
-    <p>La pre-inscripción ha sido completada con éxito. ¡Muchas gracias!</p>
+    <div class="congratulations">
+      <h1>¡Felicitaciones!</h1>
+      <p>La pre-inscripción ha sido completada con éxito. ¡Muchas gracias!</p>
+    </div>
   </div>`,
   styleUrls: ['./assets/styles.css']
 })

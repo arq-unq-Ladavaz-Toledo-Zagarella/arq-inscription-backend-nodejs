@@ -28,12 +28,12 @@ import AuthService from '../services/auth.service';
                    </h5>
                 </ul>
                 <div class="btn-group">
-                  <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  <button type="button" class="chooseSubject btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     {{getValueForThisDropdown(subject._id)}}
                   </button>
                   <div class="dropdown-menu">
                     <button class="dropdown-item" (click)="unselect(subject)">Todavía no la voy a cursar</button>
-                    <button class="dropdown-item" *ngFor="let thiscourse of subject.courses" (click)="selectCourse(thiscourse)">Cursaría en comisión {{thiscourse.name}}</button>
+                    <button class="chooseCourse dropdown-item" *ngFor="let thiscourse of subject.courses" (click)="selectCourse(thiscourse)">Cursaría en comisión {{thiscourse.name}}</button>
                   </div>
                 </div>
               </li>
@@ -43,7 +43,7 @@ import AuthService from '../services/auth.service';
         </div>
       </div>
       <div class="col-lg-2 col-centered">
-        <button type="button" class="btn btn-primary btn-lg btn-block" (click)="send()">Finalizar</button>  
+        <button type="button" class="submitQuestion btn btn-primary btn-lg btn-block" (click)="send()">Finalizar</button>  
       </div>
     </div>
   </section>`,
@@ -150,7 +150,7 @@ export default class QuestionComponent {
     if(this.alreadyAnswered.length>0){
       this.editingInscription = true
       this.initEditedDropdowns()
-      alert("Acepte para editar la encuesta previamente realizada")
+     // alert("Acepte para editar la encuesta previamente realizada")
     }else{
       this.initDefaultDropdowns()
     }
