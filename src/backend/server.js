@@ -2,6 +2,7 @@ import app from "./app"
 import swaggerTools from 'swagger-tools';
 import swaggerDoc from './swagger.json';
 import routes from './routes/routes.js';
+import logger from './helpers/winston.js';
 
 import mongoose from 'mongoose'
 mongoose.connect('mongodb://root:root@ds249605.mlab.com:49605/arquitectura')
@@ -24,7 +25,7 @@ swaggerTools.initializeMiddleware(swaggerDoc, middleware => {
 	app.listen(process.env.PORT || port);
 });
 
-var winston = require('winston');
+/*var winston = require('winston');
 require('winston-loggly-bulk');
  
  winston.add(winston.transports.Loggly, {
@@ -33,5 +34,6 @@ require('winston-loggly-bulk');
     tags: ["Winston-NodeJS"],
     json:true
 });
+*/
 
-winston.log('info',"Start app");
+//logger.log('info',"Start app");

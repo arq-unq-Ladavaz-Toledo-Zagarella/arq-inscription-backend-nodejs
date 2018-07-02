@@ -1,4 +1,6 @@
 require('newrelic');
+
+const logger = require('./helpers/winston.js')
 import express from 'express'
 import bodyParser from 'body-parser'
 
