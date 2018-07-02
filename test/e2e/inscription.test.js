@@ -9,7 +9,7 @@ describe("Create an inscription", () => {
 
   it("Should add a inscription from a student", async() => {
 
-   browser.get("http://localhost:3001/#/question/eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6IjVhN2M3MDRkNGFhMzYxMjMyY2JiMGQyNSJ9.Hurt71UJSHE-hLeM04WCXcK0-a3V4463eol5gwjskYw") 
+   browser.get("http://inscripciones-unq.herokuapp.com/#/question/eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6IjVhN2M3MDRkNGFhMzYxMjMyY2JiMGQyNSJ9.Hurt71UJSHE-hLeM04WCXcK0-a3V4463eol5gwjskYw") 
 
     await element.all(by.css(".chooseSubject")).last().click()
 
