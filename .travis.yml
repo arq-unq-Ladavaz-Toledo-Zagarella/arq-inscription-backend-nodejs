@@ -30,7 +30,7 @@ before_script:
 script:
   - gulp all-non-e2e
   - docker build -t $DOCKER_USERNAME/arq-inscription-backend-nodejs-$(repoName) .
-  - docker-compose run e2e
+  #- docker-compose run e2e
 
 after_success:
   - pushRepoDockerhub
